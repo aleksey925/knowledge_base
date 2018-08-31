@@ -7,3 +7,4 @@
 2. [Linux](./linux/index.md) 
 3. MACOS
     - [Заметки о работе с ОС MACOS](macos/macos-notes-index.md)
+4. [Чистый код](clean-code/clean-code-index.md)
