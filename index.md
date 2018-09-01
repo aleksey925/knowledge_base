@@ -10,3 +10,5 @@
     - [Linux](./linux/index.md) 
     - MACOS
         - [Заметки о работе с ОС MACOS](macos/macos-notes-index.md)
+
+3. [Кулинария](gastronomy/gastronomy-index.md)
