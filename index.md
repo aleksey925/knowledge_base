@@ -6,6 +6,7 @@
         - [Заметки про Python](python/python-notes-index.md)
         - [ORM](python/orm-index.md)
         - [Реализация интересных заданий](python/code-examples-index.md)
+    - [Golang](golang/golang-notes-index.md)
 2. Базы данных
     - [PostgreSQL](db/postgresql.md)
 3. ОС
