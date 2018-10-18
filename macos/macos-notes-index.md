@@ -20,6 +20,7 @@
         - [Репозитори brew](#Репозитори-brew)
         - [Кэш brew](#Кэш-brew)
         - [Смена используемой версии пакета](#Смена-используемой-версии-пакета)
+        - [Запуск и остановка фоновых служб brew](#Запуск-и-остановка-фоновых-служб-brew)
         
     - <h4>[PGK](#PGK)</h4>
     
@@ -244,6 +245,14 @@ brew switch <FORMULA> <VERSION>
 ```bash
 brew switch python3 3.5.1
 ```
+
+
+<a name='Запуск-и-остановка-фоновых-служб-brew'></a>
+#### Запуск и остановка фоновых служб brew
+
+https://robots.thoughtbot.com/starting-and-stopping-background-services-with-homebrew
+
+
 
 <a name='PGK'></a>
 ### PGK
