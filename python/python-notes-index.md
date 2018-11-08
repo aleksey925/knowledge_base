@@ -18,9 +18,14 @@ Python
     - <h4>[Строки](#Строки)</h4>
 
         - [Вычисление длинны строки в байтах](#Вычисление-длинны-строки-в-байтах)
-
+    
+    - <h4>[Кортежи](#Кортежи)</h4>
+    
+        - [Реализация tuple в CPython](#Реализация-tuple-в-CPython)
+    
     - <h4>[Списки](#Списки)</h4>
-
+        
+        - [Реализация list в CPython](#Реализация-list-в-CPython)
         - [Создание строки из списка](#Создание-строки-из-списка)
         - [Разворот списка](#Разворот-списка)
         - [Срезы](#Срезы)
@@ -193,11 +198,38 @@ text = 'Какая-то строка'
 print(len(text.encode('utf8')))
 ```
 
+<a name='Кортежи'></a>
+### Кортежи
+
+
+<a name='Реализация-tuple-в-CPython'></a>
+#### Реализация tuple в CPython
+
+- [Understanding Python's underlying data structures](http://blackecho.github.io/blog/programming/2016/03/23/python-underlying-data-structures.html)
+- [How is tuple implemented in CPython?](https://stackoverflow.com/questions/14135542/how-is-tuple-implemented-in-cpython)
+
+
 <a name='Списки'></a>
 ### Списки
 
+<a name='Реализация-list-в-CPython'></a>
+#### Реализация list в CPython
 
-<a name='Создание строки из списка'></a>
+В Python списки реализованы как массив хранящий ссылки на объекты типа 
+`PyObject`. Такая реализация позволяет обращаться к элементу массива по 
+индексу за констатное время. Увеличение размера массива происходит по 
+определенному алгоритму ([исходный код](https://hg.python.org/cpython/file/tip/Objects/listobject.c)).
+Вот как будет увеличиваться размер массива при последовательном добавлении в
+него новых элементов: 0, 4, 8, 16, 25, 46, 58, 72, 88, and etc.
+
+Использование источники:
+
+- [Understanding Python's underlying data structures](http://blackecho.github.io/blog/programming/2016/03/23/python-underlying-data-structures.html)
+- [Внутреннее устройство Python list](https://habr.com/post/273045/)
+
+
+
+<a name='Создание-строки-из-списка'></a>
 #### Создание строки из списка
 
 Свернуть список можно банально использовав цикл:
