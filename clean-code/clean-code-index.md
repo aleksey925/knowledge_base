@@ -199,8 +199,8 @@ interface segregation и dependency inversion) — мнемонический а
     логику работы программы, не нужно трогать реализацию класса Order.
     
      
-Более подробное описание всех этих принципов можно посмотреть 
-[здесь](https://www.youtube.com/watch?v=59tq5Fcgn7A).
+Данная заметка основана [на видео уроке](https://www.youtube.com/watch?v=59tq5Fcgn7A).
+[Принципы SOLID, о которых должен знать каждый разработчик | habr](https://m.habr.com/company/ruvds/blog/426413/)
 
     
     
