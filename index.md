@@ -8,6 +8,7 @@
         - [Реализация интересных заданий](python/code-examples-index.md)
     - [Golang](golang/golang-notes-index.md)
 2. Базы данных
+    - [Теория баз данных](db/database-theory-index.md)
     - [PostgreSQL](db/postgresql.md)
 3. ОС
     - [Linux](./linux/index.md) 
