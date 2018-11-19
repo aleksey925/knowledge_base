@@ -703,11 +703,16 @@ while (<слот занят>) {
 
 >Python 3.6 и выше
 
-Современные словари (python 3.6 и выше) основаны на алгоритме предложенным 
-Реймондом Хеттинджером вот его доклад [Cовременные словари в python: сочетание дюжины отличных идей. Реймонд Хеттинджер - PyCon 2017](http://pythonz.net/videos/95/).
+Современные словари (python 3.6 и выше) основаны на алгоритме предложенном 
+Реймондом Хеттинджером.
+
 
 Материалы по данной теме:
-
+- [Cовременные словари в python: сочетание дюжины отличных идей. Реймонд Хеттинджер - PyCon 2017](http://pythonz.net/videos/95/) - 
+  видеозапись с конференции где презентуется новая реализация словаря
+- [Реализация словарей из python >= 3.6 написанная на python](#python-notes-index/dict/impl-dict-in-cpython/impl-compact-and-ordered-dict.py) - 
+  код из презентации Реймонда Хеттинджера
+- [Proof-of-concept for a more space-efficient, faster-looping dictionary](http://code.activestate.com/recipes/578375/)
 - [Faster, more memory efficient and more ordered dictionaries on PyPy](https://morepypy.blogspot.com/2015/01/faster-more-memory-efficient-and-more.html)
 
 
