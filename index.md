@@ -3,6 +3,7 @@
 1. Программирование
     - [Чистый код](clean-code/clean-code-index.md)
     - [Computer Science](computer-science/computer-science-index.md)
+    - [Регулярные выражения](regexp/regexp-index.md)
     - Python
         - [Заметки про Python](python/python-notes-index.md)
         - [ORM](python/orm-index.md)
