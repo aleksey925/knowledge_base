@@ -8,6 +8,7 @@
         - [Заметки про Python](python/python-notes-index.md)
         - [ORM](python/orm-index.md)
         - [Реализация интересных заданий](python/code-examples-index.md)
+        - [Документация к библиотекам](python/libs-docs-index.md)
     - [Golang](golang/golang-notes-index.md)
 2. Базы данных
     - [Теория баз данных](db/database-theory-index.md)
