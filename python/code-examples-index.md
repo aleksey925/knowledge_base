@@ -10,6 +10,7 @@
 - [Работа с менеджерами контекста](#Работа-с-менеджерами-контекста)
 - [Консольный progressbar на коленке](#Консольный-progressbar-на-коленке)
 - [Автоматическая запись всех атрибутов класса в верхнем регистре](#Автоматическая-запись-всех-атрибутов-класса-в-верхнем-регистре)
+- [Реализация глобального для всех TestCase setUp and tearDown](#Реализация-глобального-для-всех-TestCase-setUp-and-tearDown)
 
 
 <a name='Проверка-на-чётность-с-помощью-поразрядного-И'></a>
@@ -326,3 +327,53 @@ print(hasattr(Check, 'a'))
 print(hasattr(Check, 'A'))
 ```
 
+<a name='Реализация-глобального-для-всех-TestCase-setUp-and-tearDown'></a>
+### Реализация глобального для всех TestCase setUp and tearDown
+
+```python
+import unittest
+
+class TestCaseMount(type):
+    """
+    Метакласс, который позволяет собрать классы всех TestCase в одном месте.
+    """
+    def __init__(cls, name, bases, attrs):
+        if not hasattr(cls, 'test_cases'):
+            cls.test_cases = []
+        else:
+            cls.test_cases.append(cls)
+
+    @property
+    def count_test_cases(cls) -> int:
+        """
+        :return: количество test case
+        """
+        return len(cls.test_cases)
+
+
+class BaseTestCase(unittest.TestCase, metaclass=TestCaseMount):
+    """
+    Базовый класс для всех test case
+    """
+    test_cases_executed = 0
+
+    @classmethod
+    def setUpClass(cls):
+        """
+        Реализует глобальный для всех тестов setUp
+        """
+        if BaseTestCase.test_cases_executed == 0:
+            drop_test_db(engine)
+            create_test_db(engine)
+            models.Base.metadata.create_all(engine)
+
+        BaseTestCase.test_cases_executed += 1
+
+    @classmethod
+    def tearDownClass(cls):
+        """
+        Реализует глобальный для всех тестов tearDown
+        """
+        if BaseTestCase.test_cases_executed == cls.count_test_cases:
+            drop_test_db(engine)
+```
