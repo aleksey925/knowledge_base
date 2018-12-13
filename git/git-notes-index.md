@@ -16,7 +16,7 @@ Git
     
     - <h4>[Решение проблем](#Решение-проблем)</h4>
     
-        - [SSL Certificate problem: unable to get local issuer](#SSL-Certificate-problem:-unable-to-get-local-issuer)
+        - [SSL Certificate problem: unable to get local issuer certificate](#SSL-Certificate-problem:-unable-to-get-local-issuer-certificate)
     
 3. <h3>[Локальные репозитории](#Локальные-репозитории)</h3>
 
@@ -83,8 +83,8 @@ git config --global core.safecrlf true
 <a name='Решение-проблем'></a>
 ### Решение проблем
 
-<a name='SSL-Certificate-problem:-unable-to-get-local-issuer'></a>
-#### SSL Certificate problem: unable to get local issuer
+<a name='SSL-Certificate-problem:-unable-to-get-local-issuer-certificate'></a>
+#### SSL Certificate problem: unable to get local issuer certificate
 
 При возникновении такой ошибки необходимо выполнить в консоли:
 
