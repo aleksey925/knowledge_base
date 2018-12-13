@@ -91,8 +91,8 @@ git config --global core.safecrlf true
 certificate`. Для того, чтобы ее устранить нужно отключить проверку SSL 
 сертификата. Сделать это можно 2 способами:
 
-1 `export GIT_SSL_NO_VERIFY=1`
-2 `git config --global http.sslVerify false`
+- `export GIT_SSL_NO_VERIFY=1`
+- `git config --global http.sslVerify false`
 
 Ответ нашел [тут](https://confluence.atlassian.com/bitbucketserverkb/ssl-certificate-problem-unable-to-get-local-issuer-certificate-816521128.html)
 
