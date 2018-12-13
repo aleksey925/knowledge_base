@@ -334,6 +334,6 @@ func main() {
 
 
 <a name='#Реализация-GC'></a>
-### #Реализация GC
+#### Реализация GC
 
 [Как устроен garbage collector в Go 1.9 - Андрей Дроздов, Avito](https://www.youtube.com/watch?time_continue=2&v=CX4GSErFenI)
