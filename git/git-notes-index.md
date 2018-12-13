@@ -86,13 +86,13 @@ git config --global core.safecrlf true
 <a name='SSL-Certificate-problem:-unable-to-get-local-issuer-certificate'></a>
 #### SSL Certificate problem: unable to get local issuer certificate
 
-При возникновении такой ошибки необходимо выполнить в консоли:
+При клонировании репозитория (возможно не только при клонировании) может 
+возникнуть ошибка `SSL Certificate problem: unable to get local issuer 
+certificate`. Для того, чтобы ее устранить нужно отключить проверку SSL 
+сертификата. Сделать это можно 2 способами:
 
-```bash
-git config --global http.sslVerify false
-```
-
-Это позволит авторизоваться в git на основании логина/пароля, а не сертификату.
+1 `export GIT_SSL_NO_VERIFY=1`
+2 `git config --global http.sslVerify false`
 
 Ответ нашел [тут](https://confluence.atlassian.com/bitbucketserverkb/ssl-certificate-problem-unable-to-get-local-issuer-certificate-816521128.html)
 
