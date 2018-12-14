@@ -16,7 +16,7 @@
     - [Теория баз данных](db/database-theory-index.md)
     - [PostgreSQL](db/postgresql.md)
 4. ОС
-    - [Linux](./linux/index.md) 
+    - [Linux](linux/linux-notes-index.md) 
     - [MACOS](macos/macos-notes-index.md)
 
 [Кулинария](gastronomy/gastronomy-index.md)
