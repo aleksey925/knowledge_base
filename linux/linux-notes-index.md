@@ -10,7 +10,13 @@ Linux
 2. <h3>[Настройка системы](#Настройка-системы)</h3>
 
     - [Переустановка/восстановление загрузчика grub](#Переустановка/восстановление-загрузчика-grub)    
-    
+
+3. <h3>[Исправление ошибок](#Исправление-ошибок)</h3>
+
+    - [Fix неправильного отображения иконки skype в tray](#Fix-неправильного-отображения-иконки-skype-в-tray)
+
+
+  
 
 <a name='Работа-с-файловой-системой'></a>
 ## Работа с файловой системой
@@ -212,3 +218,30 @@ Boot Repair. Там вы сможете найти более подробную
 
 
 [Оригинальная статья](https://omgubuntu.ru/nie-zaghruzhaietsia-linux-chinim-zaghruzchik-grub/)
+
+
+<a name='Исправление-ошибок'></a>
+## Исправление ошибок
+
+<a name='Fix-неправильного-отображения-иконки-skype-в-tray'></a>
+### Fix неправильного отображения иконки skype в tray
+
+В некоторых оболочках значек skype в tray отображается как полтора маленьких
+значка. Для того, чтобы это исправить, нужно:
+
+- открыть файл `/usr/bin/skypeforlinux` в текстовом редакторе
+- найти в нем строку 
+
+  ```
+  nohup "$SKYPE_PATH" --executed-from="$(pwd)" --pid=$$ "$@" > "$SKYPE_LOGS/skype-startup.log" 2>&1 &
+  ```
+  
+- превести ее к следующему виду
+  
+  ```
+  XDG_CURRENT_DESKTOP=Unity
+  nohup "$SKYPE_PATH" --executed-from="$(pwd)" --pid=$$ "$@" > "$SKYPE_LOGS/skype-startup.log" 2>&1 &
+  XDG_CURRENT_DESKTOP=MATE
+  ```
+  
+Ответ нашел [здесь](https://github.com/mate-desktop/mate-panel/issues/793)
