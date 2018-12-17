@@ -9,7 +9,8 @@ Linux
 
 2. <h3>[Настройка системы](#Настройка-системы)</h3>
 
-    - [Переустановка/восстановление загрузчика grub](#Переустановка/восстановление-загрузчика-grub)    
+    - [Переустановка/восстановление загрузчика grub](#Переустановка/восстановление-загрузчика-grub)
+    - [Активация "Quick Search" в synaptic](#Активация-"Quick-Search"-в-synaptic)
 
 3. <h3>[Исправление ошибок](#Исправление-ошибок)</h3>
 
@@ -218,6 +219,18 @@ Boot Repair. Там вы сможете найти более подробную
 
 
 [Оригинальная статья](https://omgubuntu.ru/nie-zaghruzhaietsia-linux-chinim-zaghruzchik-grub/)
+
+
+<a name='Активация-"Quick-Search"-в-synaptic'></a>
+### Активация "Quick Search" в synaptic
+
+Иногда бывает, что по умолчанию "quick search" не активирован в synaptic и это 
+очень неудобно. Для того, чтобы исправить это, нужно выполнить следующие команды:
+
+```bash
+sudo apt-get install apt-xapian-index
+sudo update-apt-xapian-index -vf
+```
 
 
 <a name='Исправление-ошибок'></a>
