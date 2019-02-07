@@ -12,6 +12,7 @@
     - [Golang](golang/golang-notes-index.md)
 2. Вспомогательные инструменты
     - [git](git/git-notes-index.md)
+    - [docker](docker/docker-notes-index.md)
 3. Базы данных
     - [Теория баз данных](db/database-theory-index.md)
     - [PostgreSQL](db/postgresql.md)
