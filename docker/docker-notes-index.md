@@ -7,9 +7,10 @@
 
     - [Общие сведения](#Общие-сведения)
 
-2. <h3>[Практика](#Практика)</h3>
+2. <h3>[Запуск сервисов необходимых для разработки](#Запуск-сервисов-необходимых-для-разработки)</h3>
     
-    - [Разворачивание PostgreSQL в docker контейнере](#Разворачивание-PostgreSQL-в-docker-контейнере)
+    - [Запуск PostgreSQL](#Запуск-PostgreSQL)
+    - [Запуск RabbitMQ](#Запуск-RabbitMQ)
 
   
 <a name='Введение'></a>
@@ -27,12 +28,12 @@
 docker compose
 
 
-<a name='Практика'></a>
-## Практика
+<a name='Запуск-сервисов-необходимых-для-разработки'></a>
+## Запуск сервисов необходимых для разработки
 
 
-<a name='Разворачивание-PostgreSQL-в-docker-контейнере'></a>
-### Разворачивание PostgreSQL в docker контейнере
+<a name='Запуск-PostgreSQL'></a>
+### Запуск PostgreSQL
 
 **Создание дирректории, которая будет хранить файлы PostgreSQL**
 
@@ -104,6 +105,50 @@ psql -h localhost -U alex -d test
 ответ на то как создать пользователя и базу данных в контейнере c postgres
 - [Docker контейнер с данными на Postgres для интеграционного тестирования и лёгким расширением | habr](https://habr.com/ru/post/328226/)
 
+
+<a name='Запуск-RabbitMQ'></a>
+### Запуск RabbitMQ
+
+По сути, запуск RabbitMQ аналогичен запуску PostgreSQL, по этому приведу только
+основные команды необходимые для запуска RabbitMQ.
+
+**Создание контейнера с RabbitMQ**
+
+```bash
+docker run -d \
+           --name rabbit \
+           -p "4369:4369" \
+           -p "5672:5672" \
+           -p "15672:15672" \
+           -p "25672:25672" \
+           -p "35197:35197" \
+           -e "RABBITMQ_USE_LONGNAME=true" \
+           -e "RABBITMQ_LOGS=/var/log/rabbitmq/rabbit.log" \
+           -v $HOME/docker/volumes/rabbit:/var/lib/rabbitmq \
+           -v $HOME/docker/volumes/rabbit/logs:/var/log/rabbitmq \
+           rabbitmq:3.7.11-management
+```
+
+После выполнения данной команды будет создан и запущен контейнер содержащий 
+RabbitMQ. 
  
+Интерфейс управления доступен по ссылке [ссылке](http://127.0.0.1:15672).
+
+**Остановка контейнера**
+
+```bash
+docker stop rabbit
+```
+
+**Запуск контейнера после перезагрузки или остановки контейнера**
+
+```bash
+docker container start rabbit
+```
 
 
+Полезные ссылки:
+
+- [Настройка кластера RabbitMQ на Docker](https://thewebland.net/development/devops/rabbitmq/nastrojka-klastera-rabbitmq-na-docker/)
+- [Microservices & RabbitMQ On Docker](https://dev.to/usamaashraf/microservices--rabbitmq-on-docker-e2f)
+- [Docker Hub - rabbitmq](https://hub.docker.com/_/rabbitmq)
