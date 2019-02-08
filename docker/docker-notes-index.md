@@ -50,7 +50,15 @@ mkdir -p $HOME/docker/volumes/postgres
 Запустить контейнер postgres, так же просто как выполнить команду `docker run`
 
 ```bash
-docker run --rm --name pg-docker -e POSTGRES_USER=alex -e POSTGRES_PASSWORD=123 -e POSTGRES_DB=test -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data postgres
+docker run -d \
+           --rm \
+           --name pg \
+           -e "POSTGRES_USER=alex" \
+           -e "POSTGRES_PASSWORD=123" \
+           -e "POSTGRES_DB=test" \
+           -p "5432:5432" \
+           -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data \
+           postgres
 ```
 
 В команде выше использовано достаточно много аргументов, давайте разберем их:
@@ -77,11 +85,11 @@ docker run --rm --name pg-docker -e POSTGRES_USER=alex -e POSTGRES_PASSWORD=123 
 - d: Указывает, что контейнер должен быть запущен в detached mode (в фоновом 
 режиме).
 
--p: Привязывает порт 5432 с локальной машины, на порт 5432 в docker контейнере.
+- p: Привязывает порт 5432 с локальной машины, на порт 5432 в docker контейнере.
 Этот параметр позволяет приложениям, работающим вне контейнера, подключаться к 
 серверу postgres, работающему внутри контейнера.
 
--v: Монтирует папку $HOME/docker/volumes/postgres расположенную на локальной 
+- v: Монтирует папку $HOME/docker/volumes/postgres расположенную на локальной 
 машине, к папке /var/lib/postgresql/ располагающейся внутри контейнера. Это 
 гарантирует сохранение данных postgres даже после удаления контейнера.
 
