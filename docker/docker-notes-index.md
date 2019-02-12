@@ -11,8 +11,12 @@
     
     - [Запуск PostgreSQL](#Запуск-PostgreSQL)
     - [Запуск RabbitMQ](#Запуск-RabbitMQ)
+    
+3. <h3>[Ведение разработки вместе с docker](#Ведение-разработки-вместе-с-docker)</h3>
 
+    - [Создание образа с приложением из Dockerfile](#Создание-образа-с-приложением-из-Dockerfile)
   
+
 <a name='Введение'></a>
 ## Введение
 
@@ -160,3 +164,80 @@ docker container start rabbit
 - [Настройка кластера RabbitMQ на Docker](https://thewebland.net/development/devops/rabbitmq/nastrojka-klastera-rabbitmq-na-docker/)
 - [Microservices & RabbitMQ On Docker](https://dev.to/usamaashraf/microservices--rabbitmq-on-docker-e2f)
 - [Docker Hub - rabbitmq](https://hub.docker.com/_/rabbitmq)
+
+
+
+<a name='Ведение-разработки-вместе-с-docker'></a>
+## Ведение разработки вместе с docker
+
+
+<a name='Создание-образа-с-приложением-из-Dockerfile'></a>
+### Создание образа с приложением из Dockerfile
+
+Для того, чтобы показать базовые принципы создания нового docker образа, 
+необходимо создать проект с элементарным web приложением:
+
+app.py
+
+```python
+from flask import Flask
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
+
+app.run(host='0.0.0.0', port=5000, debug=True)
+```
+
+requirements.txt
+
+```
+flask==1.0.2
+```
+
+Теперь, когда проект создан можно заняться его докеризацией. Первым делом 
+необходимо создать файл `Dockerfile`, который будет содержать инструкции
+необходимые для сборки docker образа.
+
+Dockerfile
+
+```dockerfile
+FROM python:3
+# Копируем файлы нашего приложения в docker образ
+COPY app.py requirements.txt /opt/web_app/
+# Меняем рабочую дирректорию для того, чтобы не прописывать в командах полный 
+# путь до файлов проекта
+WORKDIR /opt/web_app/
+# Производим установку зависимостей нашего приложения внутрь docker образа
+RUN pip install -r requirements.txt
+CMD ["python", "app.py"]
+# Открывает у контейнера порт 5000 и делает его доступным извне
+EXPOSE 5000
+```
+
+Собираем образ:
+`docker build --tag=flaskapp .`
+
+Проверяем:
+`docker images`
+
+Запускаем работать в бекграунде:
+`docker run -d -p 5000:5000 flaskapp`
+
+Проверяем:
+`docker ps`
+
+Смотрим логи – запустилось ли приложение после запуска контейнера:
+`docker logs -f 7c900e34f8ab`
+
+Теперь можем открыть наше приложение в [браузере](http://0.0.0.0:5000)
+
+Полезные ссылки:
+
+- [Docker: build и пример Dockerfile](https://rtfm.co.ua/docker-build/) - заметка
+  основана на данной статье
+- [Погружаемся в Docker: Dockerfile и коммуникация между контейнерами](https://habr.com/ru/company/infobox/blog/240623/)
