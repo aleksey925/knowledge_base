@@ -14,7 +14,7 @@
     
 3. <h3>[Ведение разработки вместе с docker](#Ведение-разработки-вместе-с-docker)</h3>
 
-    - [Создание образа с приложением из Dockerfile](#Создание-образа-с-приложением-из-Dockerfile)
+    - [Запуск простого web-приложения в образе созданном из Dockerfile](#Запуск-простого-web-приложения-в-образе-созданном-из-Dockerfile)
   
 
 <a name='Введение'></a>
@@ -171,8 +171,8 @@ docker container start rabbit
 ## Ведение разработки вместе с docker
 
 
-<a name='Создание-образа-с-приложением-из-Dockerfile'></a>
-### Создание образа с приложением из Dockerfile
+<a name='Запуск-простого-web-приложения-в-образе-созданном-из-Dockerfile'></a>
+### Запуск простого web-приложения в образе созданном из Dockerfile
 
 Для того, чтобы показать базовые принципы создания нового docker образа, 
 необходимо создать проект с элементарным web приложением:
@@ -206,35 +206,103 @@ flask==1.0.2
 Dockerfile
 
 ```dockerfile
-FROM python:3
-# Копируем файлы нашего приложения в docker образ
-COPY app.py requirements.txt /opt/web_app/
-# Меняем рабочую дирректорию для того, чтобы не прописывать в командах полный 
-# путь до файлов проекта
-WORKDIR /opt/web_app/
-# Производим установку зависимостей нашего приложения внутрь docker образа
-RUN pip install -r requirements.txt
-CMD ["python", "app.py"]
+FROM python:3.7
+
 # Открывает у контейнера порт 5000 и делает его доступным извне
 EXPOSE 5000
+
+# Установка необходимых пакетов
+RUN apt-get update && \
+	apt-get install -y supervisor && \
+	apt-get install -y net-tools && \
+	apt-get install -y curl && \
+	apt-get install -y apt-utils && \
+	apt-get install -y apt-transport-https && \
+	apt-get install -y debconf-utils && \
+	apt-get install -y gcc && \
+	apt-get install -y build-essential && \
+	apt-get install -y g++
+
+# Установка необходимых locales
+RUN apt-get update && apt-get install -y locales \
+    && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
+    && locale-gen
+
+COPY app.py requirements.txt /opt/web_app/
+WORKDIR /opt/web_app/
+RUN pip install -r requirements.txt
+CMD ["python", "app.py"]
 ```
 
-Собираем образ:
-`docker build --tag=flaskapp .`
+Собираем образ
 
-Проверяем:
-`docker images`
+```bash
+docker build -t simple-web-app .
+```
 
-Запускаем работать в бекграунде:
-`docker run -d -p 5000:5000 flaskapp`
+Теперь убеждаемся, что образ успешно создался 
 
-Проверяем:
-`docker ps`
+```bash
+docker images
+```
 
-Смотрим логи – запустилось ли приложение после запуска контейнера:
-`docker logs -f 7c900e34f8ab`
+```
+REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
+simple-web-app      latest              39e2e3bc092c        About a minute ago   982MB
+python              3.7                 ac069ebfe1e1        42 hours ago         927MB
+```
 
-Теперь можем открыть наше приложение в [браузере](http://0.0.0.0:5000)
+Как видим из вывода команды, образ был создан и имеет ID `39e2e3bc092c`.
+Теперь, мы можем запустить его. Сделать это можно при помощи команды:
+
+```bash
+docker run -p 5000:5000 simple-web-app
+```
+
+Данная команда запускает образ simple-web-app и связывает 5000 порт локальной 
+машины с 5000 портом контейнера, который будет создан в результате запуска 
+образа. Если необходимо запустить контейнер в фоне, нужно добавить ключ `-d`. 
+
+Если контейнер был запущен в фоне, то для того, чтобы убедиться в его успешном
+запуске можно выполнить команду
+
+```bash
+docker ps
+```
+
+```
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                    NAMES
+0adf5f5a5077        simple-web-app      "python app.py"     5 seconds ago       Up 2 seconds        0.0.0.0:5000->5000/tcp   objective_montalcini
+```
+
+которая покажет все запущенные контейнеры. Если контейнер запущен, можно 
+посмотреть его логи при помощи:
+
+```bash
+docker logs -f 0adf5f5a5077
+```
+
+Вместо 0adf5f5a5077 нужно подставить id контейнера из вывода команды 
+`docker ps`.
+
+После того как мы убедились, что контейнер с нашим приложением успешно запущен,
+можно открыть наше приложение в [браузере](http://0.0.0.0:5000).
+
+После окончания работы контейнер с приложением можно будет остановить командой
+
+```bash
+docker stop 0adf5f5a5077
+```
+
+А если контейнер и образ более не нужны, то их можно удалить следующими 
+командами
+
+```bash
+# Удаление контейнера
+docker rm 0adf5f5a5077
+# Удаление образа
+docker rmi 39e2e3bc092c
+```
 
 Полезные ссылки:
 
