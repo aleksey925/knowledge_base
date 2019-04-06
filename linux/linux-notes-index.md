@@ -11,6 +11,9 @@ Linux
 
     - [Переустановка/восстановление загрузчика grub](#Переустановка/восстановление-загрузчика-grub)
     - [Активация "Quick Search" в synaptic](#Активация-"Quick-Search"-в-synaptic)
+    - [Настройка разрешения второго монитора](#Настройка-разрешения-второго-монитора)
+    - [Восстановление xorg.conf](#Восстановление-xorg.conf)
+    - [Настройка 5.1 звука в PulseAudio](#Настройка-5.1-звука-в-PulseAudio)
 
 3. <h3>[Исправление ошибок](#Исправление-ошибок)</h3>
 
@@ -231,6 +234,193 @@ Boot Repair. Там вы сможете найти более подробную
 sudo apt-get install apt-xapian-index
 sudo update-apt-xapian-index -vf
 ```
+
+<a name='Настройка-разрешения-второго-монитора'></a>
+### Настройка разрешения второго монитора
+
+При подключении 2 монитора я к несчастью обнаружил, что у него выставлено 
+слишком маленькое разрешение и выставить максимально доступное невозможно. 
+Ниже я опишу как я ставил систему и как решил эту проблему. Эта проблема 
+возникла сразу после установки системы, по этому описывать буду с самого 
+начала.
+
+1. Установил систему.
+2. Установил через менеджер драйверов последний доступный драйвер для своей 
+    видеокарты (на момент написания статьи это был nvidia-331) и перезагрузил 
+    систему.
+3. Подключил второй монитор.
+4. Создал `xorg.conf` с помощью автоконфигуратора `sudo nvidia-xconfig`
+5. Открыл созданный файл `sudo nano /etc/X11/xorg.conf` и в секции `Monitor` 
+   изменил значения `HorizSync` и `VertRefresh` на такие:
+
+    ```
+    HorizSync       31.0 - 81.0 
+    VertRefresh     56.0 - 76.0
+    ```
+
+6. Перезагрузил X Server.
+7. Открыл `nvidia-settings` и перешёл в раздел `X Server Display Configuration`. 
+    Здесь после внесенных изменений у второго монитора стало возможно выбрать 
+    нужное разрешение экрана. После это можно выбрать нужное расположение 
+    мониторов, выбрать главный применить эти измения, а после сохранить их нажав 
+    `Save to X Configuration file`.
+    После всех выше перечисленных действий должно все работать как надо.
+    Вот содержимое файла `xorg.conf`, после всех действий над ним:
+    
+    ```
+    Section "ServerLayout"
+        Identifier     "Layout0"
+        Screen      0  "Screen0" 0 0
+        InputDevice    "Keyboard0" "CoreKeyboard"
+        InputDevice    "Mouse0" "CorePointer"
+        Option         "Xinerama" "0"
+    EndSection
+    
+    Section "Files"
+    EndSection
+    
+    Section "InputDevice"
+    
+        # generated from default
+        Identifier     "Mouse0"
+        Driver         "mouse"
+        Option         "Protocol" "auto"
+        Option         "Device" "/dev/psaux"
+        Option         "Emulate3Buttons" "no"
+        Option         "ZAxisMapping" "4 5"
+    EndSection
+    
+    Section "InputDevice"
+    
+        # generated from default
+        Identifier     "Keyboard0"
+        Driver         "kbd"
+    EndSection
+    
+    Section "Monitor"
+        Identifier     "Monitor0"
+        VendorName     "Unknown"
+        ModelName      "CRT-0"
+        HorizSync       31.0 - 81.0
+        VertRefresh     56.0 - 76.0
+        Option         "DPMS"
+    EndSection
+    
+    Section "Device"
+        Identifier     "Device0"
+        Driver         "nvidia"
+        VendorName     "NVIDIA Corporation"
+        BoardName      "GeForce GTX 560"
+    EndSection
+    
+    Section "Screen"
+    
+    # Removed Option "metamodes" "DVI-I-0: nvidia-auto-select +1920+156, HDMI-0: nvidia-auto-select +0+0"
+        Identifier     "Screen0"
+        Device         "Device0"
+        Monitor        "Monitor0"
+        DefaultDepth    24
+        Option         "Stereo" "0"
+        Option         "nvidiaXineramaInfoOrder" "DFP-1"
+        Option         "metamodes" "DVI-I-0: 1280x1024 +1920+28, HDMI-0: nvidia-auto-select +0+0"
+        Option         "SLI" "Off"
+        Option         "MultiGPU" "Off"
+        Option         "BaseMosaic" "off"
+        SubSection     "Display"
+            Depth       24
+        EndSubSection
+    EndSection
+    ```
+    
+**Статьи которые помогли в нахождении решения:**
+
+ubuntu nvidia after reboot monitor off
+
+- http://askubuntu.com/questions/421730/xorg-conf-changes-from-nvidia-setting-have-no-effect-after-reboot
+- http://askubuntu.com/questions/456470/cant-save-nvidia-settings-for-screens-after-reboot
+
+Настройка 2 мониторов
+
+- http://unixforum.org/index.php?showtopic=90226
+
+1280x1024 HorizSync и VertRefresh
+
+- http://www.blackmoreops.com/2014/08/29/fix-linux-display-issue-find-horizsync-vertrefresh-rates/
+- http://askubuntu.com/questions/60939/how-to-get-1280x1024-with-a-benq-t905
+
+ubuntu модель монитора
+
+- http://igorka.com.ua/2010-03-15/ubuntu-ne-opredelyaet-model-monitora/
+- http://igorka.com.ua/2010-02-22/x-server-v-linux/
+
+Изменить разрешение монитора в ubuntu
+
+- http://forums.overclockers.ru/viewtopic.php?t=112768
+- http://help.ubuntu.ru/wiki/драйвер_видеокарт_nvidia#неправильно_определяются_разрешение_и_частота_монитора
+
+
+<a name='Восстановление-xorg.conf'></a>
+### Восстановление xorg.conf
+
+Бывают случаи, что в результате редактирования файла `xorg.conf`, Xserver не 
+запускается, а резервная копия файла не была сделана. В этом случае можно 
+сгенерировать новый файл с помощью утилиты для настройки Xserver:
+
+```
+sudo X -configure
+```
+
+После этого в домашней директории появится файл xorg.conf.new. Попробовать 
+загрузиться использовав настройки этого файла можно вот так:
+
+```
+sudo X -config /root/xorg.conf.new
+```
+
+Если загрузка Xserver прошла успешно, то можно заменить нерабочий файл этим.
+Стоит заметить если у вас используются проприетарные драйвера от Nvidia, то 
+лучше используйте утилиту от Nvidia. Она сама заменит не работающий файл новым 
+и вам нужно будет только попробовать перезапустить графический сеанс:
+
+```
+sudo nvidia-xconfig
+```
+
+<a name='Настройка-5.1-звука-в-PulseAudio'></a>
+### Настройка 5.1 звука в PulseAudio
+
+Настройки PulseAudio находятся в `/etc/pulse/daemon.conf`. Нужно немного 
+изменить содержание данного файла. Разкоментируем строку:
+
+``` 
+; default-sample-channels = 2
+```
+ 
+В этом файле знаком комментария служит ";". За место двойки в этой строке, 
+нужно указать сколько каналов нужно использовать. На пример если у вас 
+система 5.1, нужно поставить 6, если система 7.1, то соответственно пишем 8. 
+Далее находим строку: 
+
+```
+; enable-lfe-remixing = no
+```
+ 
+разкоментируем её и устанавливаем значение не "no", а "yes". Эта строка 
+отвечает за включение саббуфера. Lfe (low-frequency effects, перевод: 
+низкочастотные эффекты). Находим строку:
+
+``` 
+; enable-remixing = yes
+```
+ 
+и разкоментируем её. На одном из форумов объясняется этот параметр так: 
+«Любой звук меньше 5.1 будет растягиваться до 5.1. Настоящий 5.1 будет 
+выводиться нормально, главное чтоб в плеере был указан вывод 5.1 (vlc, 
+smplayer), а то сперва произойдет даунмикс плеером до стерео (дефолтная 
+настройка), а потом пульс растянет до 5.1.»
+
+Дополнительные параметры звукового драйвера ALSA доступны через консольную 
+утилиту `alsamixer` (чтобы запустить, нужно ввести эту команду в терминале).
 
 
 <a name='Исправление-ошибок'></a>
