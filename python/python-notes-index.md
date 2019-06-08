@@ -799,6 +799,7 @@ entries =  [[-9092791511155847987, 'timmy', 'red'],
 - [Proof-of-concept for a more space-efficient, faster-looping dictionary](http://code.activestate.com/recipes/578375/)
 - [Faster, more memory efficient and more ordered dictionaries on PyPy](https://morepypy.blogspot.com/2015/01/faster-more-memory-efficient-and-more.html)
 - [Are dictionaries ordered in Python 3.6+? | StackOverflow](https://stackoverflow.com/questions/39980323/are-dictionaries-ordered-in-python-3-6)
+- [Реализация словаря в Python - habr](https://m.habr.com/ru/company/otus/blog/448350/)
 
 
 <a name='Файлы'></a>
