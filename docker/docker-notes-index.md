@@ -56,6 +56,13 @@ docker compose
 RUN addgroup app_user && adduser -G app_user -s /bin/sh -D app_user
 ```
 
+В debian подобных дистрибутивах это можно сделать так:
+
+```
+RUN groupadd app_user && \
+    useradd --gid app_user --shell /bin/bash --create-home app_user
+```
+
 После этого, чтобы сменить текущего пользователя необходимо прописать в 
 Dockerfile 
 ```

@@ -100,7 +100,11 @@ Python
         - [Поиск (lookup) очень дорогой](#Поиск-(lookup)-очень-дорогой)
         - [Ввод/вывод (python 3.X)](#Ввод/вывод-(python-3.X))
 
-11. <h3>[Pycharm](#Pycharm)</h3>
+11. <h3>[Deploy web приложений](#Deploy-web-приложений)</h3>
+    
+    - [Настройка nginx-unit и nginx](#Настройка-nginx-unit-и-nginx)
+
+12. <h3>[Pycharm](#Pycharm)</h3>
 
     - [Live Template](#Live-Template)
     - [Смена регистра](#Смена-регистра)
@@ -2231,6 +2235,27 @@ print(result)
 Если решать в лоб и использовать input(), то программа выполнится за 1.528, 
 а если на прямую читать с sys.stdin, то программа выполнится за 0.858.
 
+
+<a name='Deploy-web-приложений'></a>
+## Deploy web приложений
+
+<a name='Настройка-nginx-unit-и-nginx'></a>
+### Настройка nginx-unit и nginx
+
+Полезные материалы:
+
+- [NGINX Conf 2018: Configuring NGINX Unit for Production Applications – Serving a Django Project](https://www.nginx.com/blog/configuring-nginx-unit-for-production-applications-serving-django-project/)
+- [Запускаем Laravel с помощью Nginx Unit в Docker](https://uncaughtexception.ru/2017/10/16/zapuskaem-laravel-s-pomoschyu-nginx-unit-v-docker.html)
+- [NGINX UNIT - Записки сисадмина](https://sysadmin.pm/nginx-unit/)
+- [nginx-unit-example - GitHub](https://github.com/timtegeler/nginx-unit-example)
+- [Nginx Unit - Веб. Мысли в слух](https://miholeus.com/python/nginx-unit.html)
+- [Обслуживание приложений flask с помощью uwsgi и nginx в ubuntu 16.04](https://www.8host.com/blog/obsluzhivanie-prilozhenij-flask-s-pomoshhyu-uwsgi-i-nginx-v-ubuntu-16-04/)
+- [Разворачиваем python проект с docker на примере django + nginx + gunicorn + postgresql](https://www.haikson.com/programmirovanie/python/django-nginx-gunicorn-postgresql-docker/)
+- [Развертывание приложения python wsgi с помощью uwsgi+nginx](http://www.8host.com/blog/razvertyvanie-prilozheniya-python-wsgi-s-pomoshhyu-uwsginginx/)
+- [Настройка веб-сервера для Django с nginx и uWSGI](http://itman.in/django-webserver-nginx-uwsgi/)
+- [Очень простой способ заставить работать django на сервере](http://itman.in/stavim-django-na-server/)
+- [Зачем используют Nginx + другой сервер (Apache, Phusion Passanger, etc.)? - Toster](https://toster.ru/q/337352)
+- [Why does nginx starts process as root? - StackExchange](https://unix.stackexchange.com/questions/134301/why-does-nginx-starts-process-as-root)
 
 <a name='Pycharm'></a>
 ## Pycharm
