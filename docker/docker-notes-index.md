@@ -47,6 +47,9 @@ docker compose
   images и опционально volumes
 - `docker system prune -a` - удаляет все containers, networks, images и 
   опционально volumes
+- `docker volume prune` - удаление всех volume
+- `docker stop $(docker ps -a -q)` - остановка всех контейнеров
+
 
 
 <a name='Пользователь-в-Docker'></a>
