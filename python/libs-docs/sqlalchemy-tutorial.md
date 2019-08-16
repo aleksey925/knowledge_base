@@ -19,6 +19,7 @@ SQLAlchemy
 - очень подробный разбор возможностей sqlalchemy
  [локально сохраненная версия доклада](https://cloud.mail.ru/public/48v3/5qWXw2sVH), 
  [Денис Катаев, Tinkoff.ru «SQLAlchemy: Python vs Raw SQL»](https://www.youtube.com/watch?v=jUGK-CtM-Mk)
+- оптимизация [Ускорение SQLAlchemy для архитектурных космонавтов / Алексей Старков (Qrator Labs)](https://www.youtube.com/watch?v=flA2lEl2a0M)
 
  
     
