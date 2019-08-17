@@ -47,6 +47,11 @@ alembic init --template generic alembic
     import config as app_conf
     from models import Base
     ```
+- находим строку `target_metadata = None` и заменяем `None` на `Base.metadata`,
+в итоге получится:
+    ```python
+    target_metadata = Base.metadata
+    ```
 - добавляем функцию get_url, которая будет извлекать из нашего глобального 
 конфига URL для подключения к БД
     ```python
