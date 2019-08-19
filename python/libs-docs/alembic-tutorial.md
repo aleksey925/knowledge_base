@@ -213,3 +213,4 @@ env.
 
 Полезные ссылки:
 - [Sqlite lack of ALTER support, Alembic migration failing because of this. Solutions?](https://stackoverflow.com/questions/30378233/sqlite-lack-of-alter-support-alembic-migration-failing-because-of-this-solutio)
+- [batch_alter_table - alembic](https://kite.com/python/docs/alembic.op.batch_alter_table) 
