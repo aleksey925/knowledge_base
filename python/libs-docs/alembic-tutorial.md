@@ -191,3 +191,25 @@ alembic downgrade -1
 - [Проект с примерами кода](https://bitbucket.org/alex925/alembic-example/src/master/)
 - [alembic – Python migrations quick start](https://michaelheap.com/alembic-python-migrations-quick-start/)
 - [Schema migrations with Alembic, Python and PostgreSQL](https://www.compose.com/articles/schema-migrations-with-alembic-python-and-postgresql/)
+
+
+
+## Исправление известных проблем
+
+### No support for ALTER of constraints in SQLite dialec
+
+При использовании sqlite может возникать ошибка 
+`No support for ALTER of constraints in SQLite dialect` (в моем случае данная 
+ошибка возникала, когда один из столбцов был помечен как уникальный 
+`unique=True`).
+
+Для того, чтобы исправить данную ошибку, нужно внести исправления в функции
+`run_migrations_offline` и `run_migrations_online`, которые находятся в скрипте 
+env.
+
+В этих функциях необходимо найти вызов context.configure и добавить в него 
+параметр `render_as_batch=True`. После этого будут генерироваться корректные 
+миграции.
+
+Полезные ссылки:
+- [Sqlite lack of ALTER support, Alembic migration failing because of this. Solutions?](https://stackoverflow.com/questions/30378233/sqlite-lack-of-alter-support-alembic-migration-failing-because-of-this-solutio)
