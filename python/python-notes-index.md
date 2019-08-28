@@ -2241,7 +2241,7 @@ print(result)
 #### Оптимизация потребления памяти, способы поиска утечек памяти
 
 Материалы по теме:
-- [Локальная копия доклада](https://cloud.mail.ru/public/2zSr/WfmoWSR26), 
+- [Локальная копия доклада](https://cloud.mail.ru/public/485j/5dzHRTWb8), 
   [«Память и Python. Что надо знать для счастья?» Алексей Кузьмин, ЦНС](https://www.youtube.com/watch?v=D0vbuIDOV4c)
 
 
