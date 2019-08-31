@@ -733,7 +733,7 @@ while (<слот занят>) {
 # TODO дописать https://www.youtube.com/watch?v=JhixzgVpmdM 20:55 
 
 Данная заметка основана на докладе Кирилла Лашкевича 
-[Dictionary в Python. Кирилл Лашкевич - Python Meetup 30.08.2013](https://www.youtube.com/watch?v=JhixzgVpmdM)
+[Dictionary в Python. Кирилл Лашкевич - Python Meetup 30.08.2013](https://www.youtube.com/watch?v=JhixzgVpmdM) ([Локальная копия](https://cloud.mail.ru/public/3ph9/3LvBrTk5o))
 
 Материалы по данной теме:
 
