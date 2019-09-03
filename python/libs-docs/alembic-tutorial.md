@@ -26,11 +26,12 @@ pip3 install alembic==1.0.10
 alembic init --template generic alembic
 ```
 
-После инициализации проекта, необходимо изменить стандартные скрипты. Для того,
-чтобы научить alembic брать url БД не из `alembic.ini`, а из глобального
-для всего проекта конфига (который обычно во всех flask проектах представляет 
-из себя python модуль), а так же включить поддержку автогенерации миграций. 
-Для этого открываем скрипт `alembic/env.py` и:
+После инициализации проекта, необходимо немного подправить сгенерированный 
+скрипт env.py. Для того, чтобы научить alembic брать url БД не из 
+`alembic.ini`, а из глобального для всего проекта конфига (который обычно во 
+всех flask проектах представляет из себя python модуль), а так же включить 
+поддержку автогенерации миграций и т д. Для этого открываем скрипт 
+`alembic/env.py` и:
 
 - заменяем все импорты на следующие
     ```python
@@ -47,6 +48,12 @@ alembic init --template generic alembic
     import config as app_conf
     from models import Base
     ```
+- находим строку `fileConfig(config.config_file_name)` и заменяем ее на
+  `fileConfig(config.config_file_name, disable_existing_loggers=False)`. Если
+   это не сделать alembic отключит все существующие логгеры. В случае если 
+   alembic вызывается исключительно как консольная команда, то это не страшно,
+   но если работа с миграциями будет осуществляться из кода приложения, 
+   то дефотное поведение alembic может доставить много хлопот. 
 - находим строку `target_metadata = None` и заменяем `None` на `Base.metadata`,
 в итоге получится:
     ```python
@@ -196,6 +203,63 @@ alembic downgrade -1
 - [Schema migrations with Alembic, Python and PostgreSQL](https://www.compose.com/articles/schema-migrations-with-alembic-python-and-postgresql/)
 
 
+### Применение миграций из кода приложения
+
+Для того, чтобы применить миграции из кода приложения можно воспользоваться
+следующим кодом
+```python
+import logging
+import os
+
+from alembic.config import main as alembic_commands
+
+
+def root_logger_cleaner():
+    """
+    Сбрасывает root логгер к настройкам, которые были у root логгера при
+    инициализации коррутины
+    """
+    root = logging.getLogger()
+    default_settings = {
+        'level': root.level,
+        'disabled': root.disabled,
+        'propagate': root.propagate,
+        'filters': root.filters[:],
+        'handlers': root.handlers[:],
+    }
+    yield
+
+    while True:
+        for attr, attr_value in default_settings.items():
+            setattr(root, attr, attr_value)
+        yield
+
+
+def apply_migrations(root_dir):
+    """
+    Применяет к текущей БД все миграции
+    :param root_dir: корневая дирректория проекта (дирректория в которой
+    располагается папка alembic, содержащая миграции)
+    """
+    cwd = os.getcwd()
+    os.chdir(root_dir)
+    logger_cleaner = root_logger_cleaner()
+    next(logger_cleaner)
+
+    try:
+        alembic_commands(argv=('--raiseerr', 'upgrade', 'head',))
+    except Exception as err:
+        next(logger_cleaner)
+        logging.getLogger('serial-notifier').error(
+            f'Возникла ошибка при попытке применить миграции: {err}'
+        )
+        raise
+    finally:
+        os.chdir(cwd)
+
+    next(logger_cleaner)
+```
+
 
 ## Исправление известных проблем
 
@@ -216,4 +280,78 @@ env.
 
 Полезные ссылки:
 - [Sqlite lack of ALTER support, Alembic migration failing because of this. Solutions?](https://stackoverflow.com/questions/30378233/sqlite-lack-of-alter-support-alembic-migration-failing-because-of-this-solutio)
-- [batch_alter_table - alembic](https://kite.com/python/docs/alembic.op.batch_alter_table) 
+- [batch_alter_table - alembic](https://kite.com/python/docs/alembic.op.batch_alter_table)
+
+
+### Изменение foreign key в sqlite
+
+Пример миграции, которая изменяет значение ondelete у внешнего ключа
+
+```python
+from alembic import op
+import sqlalchemy as sa
+from sqlalchemy import orm
+
+
+NEW_SERIES_TABLE_ARGS = (
+    'series',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('id_serial', sa.Integer(), nullable=True),
+    sa.Column('series_number', sa.Integer(), nullable=True),
+    sa.Column('season_number', sa.Integer(), nullable=True),
+    sa.Column('looked', sa.Boolean(), nullable=True),
+    sa.ForeignKeyConstraint(['id_serial'], ['serial.id'], ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('id')
+)
+
+OLD_SERIES_TABLE_ARGS = (
+    'series',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('id_serial', sa.Integer(), nullable=True),
+    sa.Column('series_number', sa.Integer(), nullable=True),
+    sa.Column('season_number', sa.Integer(), nullable=True),
+    sa.Column('looked', sa.Boolean(), nullable=True),
+    sa.ForeignKeyConstraint(['id_serial'], ['serial.id'], ),
+    sa.PrimaryKeyConstraint('id')
+)
+
+
+def move_data(table_args):
+    temp_serial_table_name = 'series_temp'
+    column_series_tabel = [
+        'id', 'id_serial', 'series_number', 'season_number', 'looked'
+    ]
+    sql_get_all_series = (
+        f'select {", ".join(column_series_tabel)} '
+        f'from {temp_serial_table_name}'
+    )
+
+    # В sqlite нельзя изменить foreign key, по этому приходится создавать новую
+    # таблицу и переносить в нее данные из старой
+    op.rename_table('series', temp_serial_table_name)
+
+    new_series_table = op.create_table(*table_args)
+
+    bind = op.get_bind()
+    session = orm.Session(bind=bind)
+
+    all_series = list(map(
+        lambda row: dict(zip(column_series_tabel, row)),
+        session.execute(sql_get_all_series)
+    ))
+    op.bulk_insert(new_series_table, all_series)
+    session.commit()
+
+    op.drop_table(temp_serial_table_name)
+
+
+def upgrade():
+    move_data(NEW_SERIES_TABLE_ARGS)
+
+
+def downgrade():
+    move_data(OLD_SERIES_TABLE_ARGS)
+```
+
+Полезные ссылки:
+- https://www.techonthenet.com/sqlite/foreign_keys/foreign_delete.php
