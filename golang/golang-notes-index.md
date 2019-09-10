@@ -273,6 +273,18 @@ result = lib.add(2, 3)
 print(result)
 ```
 
+Полезные ссылки:
+
+- [cgo - github](https://github.com/golang/go/wiki/cgo)
+- [Python ctypes definition for c struct - stackoverflow](https://stackoverflow.com/questions/24640817/python-ctypes-definition-for-c-struct)
+- [See Python, See Python Go, Go Python Go - heroku](https://blog.heroku.com/see_python_see_python_go_go_python_go)
+- [Go from Python - github](https://github.com/jbuberel/buildmodeshared/tree/master/gofrompython)
+- [BUILDING PYTHON MODULES WITH GO 1.5 - blog.filippo](https://blog.filippo.io/building-python-modules-with-go-1-5/)
+- [Building shared libraries in Go: Part 1](https://www.darkcoding.net/software/building-shared-libraries-in-go-part-1/)
+- [Creating shared libraries in Go](http://snowsyn.net/2016/09/11/creating-shared-libraries-in-go/)
+- [ctypes return a string from c function](https://stackoverflow.com/questions/14883853/ctypes-return-a-string-from-c-function)
+- [Вызов функций Go из других языков](https://habr.com/ru/company/mailru/blog/324250/)
+
 
 <a name='Подсчет-сколько-раз-какой-символ-встретился-в-строке'></a>
 ### Подсчет сколько раз какой символ встретился в строке

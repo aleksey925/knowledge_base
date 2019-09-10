@@ -105,7 +105,11 @@ Python
     
     - [Настройка nginx-unit и nginx](#Настройка-nginx-unit-и-nginx)
 
-12. <h3>[Pycharm](#Pycharm)</h3>
+13. <h3>[Тестирование](#Тестирование)</h3>
+
+    - [Mock](#Mock)
+
+14. <h3>[Pycharm](#Pycharm)</h3>
 
     - [Live Template](#Live-Template)
     - [Смена регистра](#Смена-регистра)
@@ -2266,6 +2270,20 @@ print(result)
 - [Очень простой способ заставить работать django на сервере](http://itman.in/stavim-django-na-server/)
 - [Зачем используют Nginx + другой сервер (Apache, Phusion Passanger, etc.)? - Toster](https://toster.ru/q/337352)
 - [Why does nginx starts process as root? - StackExchange](https://unix.stackexchange.com/questions/134301/why-does-nginx-starts-process-as-root)
+
+
+<a name='Тестирование'></a>
+## Тестирование
+
+<a name='Mock'></a>
+### Mock
+
+Полезные ссылки:
+
+- [Модуль Mock: макеты-пустышки в тестировании - habr](https://habr.com/ru/post/141209/)
+- [Mock a class and a class method in python unit tests - stackoverflow](https://stackoverflow.com/questions/33585431/mock-a-class-and-a-class-method-in-python-unit-tests)
+- [Unit-тесты, пытаемся писать правильно, чтобы потом не было мучительно больно - habr](https://habr.com/ru/post/116372/)
+
 
 <a name='Pycharm'></a>
 ## Pycharm
