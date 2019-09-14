@@ -18,5 +18,3 @@
 4. ОС
     - [Linux](linux/linux-notes-index.md) 
     - [MACOS](macos/macos-notes-index.md)
-
-[Кулинария](gastronomy/gastronomy-index.md)
