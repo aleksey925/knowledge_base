@@ -301,9 +301,9 @@ assert result == ['ok', 23, 'bar', 'ok', 'ok', 'ok', 'ok', 'ok']
 import time
 
 count_iter = 9
-for i in range(count_iter):
-    made = round(i / (count_iter - 1) * 100)
-    print('\r[{}] {}%'.format('#' * round(made / 4), made), end='')
+for current_iter in range(1, count_iter + 1):
+    made = round(current_iter / count_iter * 100)
+    print('\r[{:<25}] {}%'.format('#' * round(made / 4), made), end='')
     time.sleep(.5)
 else:
     print()
