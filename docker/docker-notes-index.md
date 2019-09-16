@@ -64,7 +64,6 @@ docker compose
 
 **Удаление контейнеров/образов**
 
-- `docker kill $(docker ps -q)` - останавливает все контейнеры
 - `docker rm -vf $(docker ps -a -q)` - удаляет все контейнеры
 - `docker rmi -f $(docker images -a -q)` - удаляет все образы
 - `docker system prune` - удаляет все не используемые containers, networks, 
