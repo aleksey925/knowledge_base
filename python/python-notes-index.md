@@ -734,7 +734,7 @@ while (<слот занят>) {
 - берем от хэша n младших битов
 - полученое значение используем как индекс
 
-# TODO дописать https://www.youtube.com/watch?v=JhixzgVpmdM 20:55 
+TODO дописать https://www.youtube.com/watch?v=JhixzgVpmdM 20:55 
 
 Данная заметка основана на докладе Кирилла Лашкевича 
 [Dictionary в Python. Кирилл Лашкевич - Python Meetup 30.08.2013](https://www.youtube.com/watch?v=JhixzgVpmdM) ([Локальная копия](https://cloud.mail.ru/public/3ph9/3LvBrTk5o))
@@ -802,7 +802,7 @@ entries =  [[-9092791511155847987, 'timmy', 'red'],
 
 Материалы по данной теме:
 
-- [Современные словари в python: сочетание дюжины отличных идей. Реймонд Хеттинджер - PyCon 2017](http://pythonz.net/videos/95/) [Копия доклада](https://cloud.mail.ru/public/3DTb/3RiKYo5c2)
+- [Современные словари в python: сочетание дюжины отличных идей. Реймонд Хеттинджер - PyCon 2017](http://pythonz.net/videos/95/), [Копия доклада](https://cloud.mail.ru/public/3DTb/3RiKYo5c2)
 - [Реализация словарей из python >= 3.6 написанная на python](python-notes-index/dict/impl-dict-in-cpython/impl-compact-and-ordered-dict.py) - 
   код из презентации Реймонда Хеттинджера
 - [Proof-of-concept for a more space-efficient, faster-looping dictionary](http://code.activestate.com/recipes/578375/)
