@@ -178,9 +178,7 @@ sys.exit(app.exec_())
   мы описали выше.
 - Кроме самого python скрипта, потребуется еще bash скрипт, который
   будет указывать, как именно запускать python скрипт. Расположить его 
-  необходимо так же в папке MacOS. Кроме этого необходимо обратить особое 
-  внимание на то, что создаваемый скрипт должен иметь такое-же имя как самое 
-  прилоежние и не иметь расширения. В нашем случае скрипт будет называться 
+  необходимо так же в папке MacOS. В нашем случае скрипт будет называться 
   simpleapp и будет иметь следующие содержание:
   ```bash
   #!/usr/bin/env bash
@@ -245,10 +243,11 @@ sys.exit(app.exec_())
 правильная картинка, необходимо либо перезагрузить комьютер, либо просто 
 выполнить `touch ./Simple app.app`.
 
-Ссылки на ресурсы использованные для написания заметки:
+Полезные ссылки:
 
 - [Превращаем Bash скрипт в macOS *.app программу](http://mynotelist.blogspot.com/2016/06/macos-bash-macos-app.html)
 - [Changing Mac OS X Application Icons Programmatically](https://www.sethvargo.com/replace-icons-osx)
+- [Пример скрипта, который автоматически собирает python приложение в macos пакет](https://bitbucket.org/alex925/serial-notifier/src/master/tools/create_macos_package.py)
 
 
 <a name='Отключение-SIP'></a>
