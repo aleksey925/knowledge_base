@@ -106,7 +106,8 @@ Python
     - [Настройка nginx-unit и nginx](#Настройка-nginx-unit-и-nginx)
 
 13. <h3>[Тестирование](#Тестирование)</h3>
-
+    
+    - [Основы тестирования](#Основы-тестирования)
     - [Mock](#Mock)
 
 14. <h3>[Pycharm](#Pycharm)</h3>
@@ -2172,6 +2173,10 @@ list_create_cor = list_create()
 print(list_create_cor.send(('foo', 'spam', 'list')))
 ```
 
+Полезные ссылки:
+
+- [Иван Ремизов - Сверхоптимизация кода на Python](https://youtu.be/4CsOOfdoU2A), [Копия](https://cloud.mail.ru/public/35XE/2AcgrAM3a)
+
 
 <a name='Ввод/вывод-(python-3.X)'></a>
 #### Ввод/вывод (python 3.X)
@@ -2275,6 +2280,12 @@ print(result)
 
 <a name='Тестирование'></a>
 ## Тестирование
+
+<a name='Основы-тестирования'></a>
+### Основы тестирования
+
+- [Вадим Пуштаев - Юнит-тесты в проектах Поиска mail.ru](https://www.youtube.com/watch?v=npJVGhmQSU4), [Копия](https://cloud.mail.ru/public/4oGW/gWYu8tKNV)
+
 
 <a name='Mock'></a>
 ### Mock
