@@ -213,6 +213,7 @@ interface segregation и dependency inversion) — мнемонический а
 
 Полезные ссылки:
 
+- [SOLID Principles explained in Python with examples](https://github.com/heykarimoff/solid.python)
 - [Принципы SOLID, о которых должен знать каждый разработчик | habr](https://m.habr.com/company/ruvds/blog/426413/)
 - [Александр Бармин - Практическое применение принципов SOLID](https://www.youtube.com/watch?v=8Eo6bf-bPes)
 
