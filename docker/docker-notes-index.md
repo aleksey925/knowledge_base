@@ -34,6 +34,7 @@
 
 Для того, чтобы установить docker на mac os, необходимо:
 
+- иметь установленный brew [инструкция по установке](../macos/macos-notes-index.md#Установка-brew)
 - добавить в brew реппозиторий cask 
   ```bash
   brew tap caskroom/cask
