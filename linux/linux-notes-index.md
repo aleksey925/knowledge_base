@@ -462,16 +462,16 @@ smplayer), а то сперва произойдет даунмикс плеер
 - открыть файл `/usr/bin/skypeforlinux` в текстовом редакторе
 - найти в нем строку 
 
-  ```
-  nohup "$SKYPE_PATH" --executed-from="$(pwd)" --pid=$$ "$@" > "$SKYPE_LOGS/skype-startup.log" 2>&1 &
-  ```
+    ```
+    nohup "$SKYPE_PATH" --executed-from="$(pwd)" --pid=$$ "$@" > "$SKYPE_LOGS/skype-startup.log" 2>&1 &
+    ```
   
 - превести ее к следующему виду
   
-  ```
-  XDG_CURRENT_DESKTOP=Unity
-  nohup "$SKYPE_PATH" --executed-from="$(pwd)" --pid=$$ "$@" > "$SKYPE_LOGS/skype-startup.log" 2>&1 &
-  XDG_CURRENT_DESKTOP=MATE
-  ```
+    ```
+    XDG_CURRENT_DESKTOP=Unity
+    nohup "$SKYPE_PATH" --executed-from="$(pwd)" --pid=$$ "$@" > "$SKYPE_LOGS/skype-startup.log" 2>&1 &
+    XDG_CURRENT_DESKTOP=MATE
+    ```
   
 Ответ нашел [здесь](https://github.com/mate-desktop/mate-panel/issues/793)
