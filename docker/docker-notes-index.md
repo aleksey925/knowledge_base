@@ -312,32 +312,20 @@ flask==1.0.2
 Dockerfile
 
 ```dockerfile
-FROM python:3.7
+FROM python:3.7.4-alpine
 
-# Открывает у контейнера порт 5000 и делает его доступным извне
-EXPOSE 5000
+RUN addgroup app_user && adduser -G app_user -s /bin/sh -D app_user
 
-# Установка необходимых пакетов
-RUN apt-get update && \
-	apt-get install -y supervisor && \
-	apt-get install -y net-tools && \
-	apt-get install -y curl && \
-	apt-get install -y apt-utils && \
-	apt-get install -y apt-transport-https && \
-	apt-get install -y debconf-utils && \
-	apt-get install -y gcc && \
-	apt-get install -y build-essential && \
-	apt-get install -y g++
+# requirements.txt копируется отдельно, для того, чтобы если если список
+# зависимостей не менялся, то не производилась их повторная установка
+COPY requirements.txt /opt/app/
+RUN pip3 install -r /opt/app/requirements.txt
 
-# Установка необходимых locales
-RUN apt-get update && apt-get install -y locales \
-    && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
-    && locale-gen
+COPY app.py /opt/app/
+WORKDIR /opt/app/
 
-COPY app.py requirements.txt /opt/web_app/
-WORKDIR /opt/web_app/
-RUN pip install -r requirements.txt
-CMD ["python", "app.py"]
+USER app_user
+CMD ["python3", "app.py"]
 ```
 
 Собираем образ
@@ -354,8 +342,8 @@ docker images
 
 ```
 REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
-simple-web-app      latest              39e2e3bc092c        About a minute ago   982MB
-python              3.7                 ac069ebfe1e1        42 hours ago         927MB
+simple-web-app      latest              39e2e3bc092c        About a minute ago   109MB
+python              3.7.4-alpine        ac069ebfe1e1        42 hours ago         98.7MB
 ```
 
 Как видим из вывода команды, образ был создан и имеет ID `39e2e3bc092c`.
@@ -378,7 +366,7 @@ docker ps
 
 ```
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                    NAMES
-0adf5f5a5077        simple-web-app      "python app.py"     5 seconds ago       Up 2 seconds        0.0.0.0:5000->5000/tcp   objective_montalcini
+0adf5f5a5077        simple-web-app      "python3 app.py"    5 seconds ago       Up 2 seconds        0.0.0.0:5000->5000/tcp   objective_montalcini
 ```
 
 которая покажет все запущенные контейнеры. Если контейнер запущен, можно 
