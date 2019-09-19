@@ -120,7 +120,7 @@ USER app_user
 <a name='Как-устроен-docker'></a>
 ### Как устроен docker
 
-[“Проникновение в Docker с примерами”, Дмитрий Столяров, Flant](https://youtu.be/hdVNKmru3LM)
+[Дмитрий Столяров - Проникновение в Docker с примерами - Flant](https://youtu.be/hdVNKmru3LM), [Копия](https://cloud.mail.ru/public/54kB/4wc2c6MMa)
 
 
 <a name='Устройство-докер-образов'></a>
