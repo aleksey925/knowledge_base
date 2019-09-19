@@ -6,7 +6,7 @@
     - [Регулярные выражения](regexp/regexp-index.md)
     - Python
         - [Заметки про Python](python/python-notes-index.md)
-        - [Реализация интересных заданий](python/code-examples-index.md)
+        - [Реализации интересных заданий](python/code-examples-index.md)
         - [Документация к библиотекам](python/libs-docs-index.md)
     - [Golang](golang/golang-notes-index.md)
 2. Вспомогательные инструменты

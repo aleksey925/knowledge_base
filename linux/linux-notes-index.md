@@ -397,9 +397,9 @@ sudo nvidia-xconfig
 ; default-sample-channels = 2
 ```
  
-В этом файле знаком комментария служит ";". За место двойки в этой строке, 
-нужно указать сколько каналов нужно использовать. На пример если у вас 
-система 5.1, нужно поставить 6, если система 7.1, то соответственно пишем 8. 
+В этом файле знаком комментария служит ";". Вместо двойки в этой строке, 
+нужно указать сколько каналов небходимо использовать. Например если у вас 
+система 5.1, нужно поставить 6, если система 7.1, то соответственно 8. 
 Далее находим строку: 
 
 ```
@@ -434,16 +434,19 @@ smplayer), а то сперва произойдет даунмикс плеер
     ```bash
     sudo apt-get install resolvconf
     ```
+
 - открыть файл `/etc/resolvconf/resolv.conf.d/head` и добавить в конец адреса
   нужных dns серверов.
   
-  ```
-  nameserver 8.8.8.8
-  nameserver 8.8.4.4
-  ``` 
+    ```
+    nameserver 8.8.8.8
+    nameserver 8.8.4.4
+    ``` 
+
 - выполнить в консоли `sudo resolvconf -u`
 
 Использованные материалы:
+
 - [How do I set my DNS when resolv.conf is being overwritten?](https://unix.stackexchange.com/questions/128220/how-do-i-set-my-dns-when-resolv-conf-is-being-overwritten)
 
 
@@ -459,16 +462,16 @@ smplayer), а то сперва произойдет даунмикс плеер
 - открыть файл `/usr/bin/skypeforlinux` в текстовом редакторе
 - найти в нем строку 
 
-  ```
-  nohup "$SKYPE_PATH" --executed-from="$(pwd)" --pid=$$ "$@" > "$SKYPE_LOGS/skype-startup.log" 2>&1 &
-  ```
+    ```
+    nohup "$SKYPE_PATH" --executed-from="$(pwd)" --pid=$$ "$@" > "$SKYPE_LOGS/skype-startup.log" 2>&1 &
+    ```
   
 - превести ее к следующему виду
   
-  ```
-  XDG_CURRENT_DESKTOP=Unity
-  nohup "$SKYPE_PATH" --executed-from="$(pwd)" --pid=$$ "$@" > "$SKYPE_LOGS/skype-startup.log" 2>&1 &
-  XDG_CURRENT_DESKTOP=MATE
-  ```
+    ```
+    XDG_CURRENT_DESKTOP=Unity
+    nohup "$SKYPE_PATH" --executed-from="$(pwd)" --pid=$$ "$@" > "$SKYPE_LOGS/skype-startup.log" 2>&1 &
+    XDG_CURRENT_DESKTOP=MATE
+    ```
   
 Ответ нашел [здесь](https://github.com/mate-desktop/mate-panel/issues/793)
