@@ -444,6 +444,7 @@ smplayer), а то сперва произойдет даунмикс плеер
 - выполнить в консоли `sudo resolvconf -u`
 
 Использованные материалы:
+
 - [How do I set my DNS when resolv.conf is being overwritten?](https://unix.stackexchange.com/questions/128220/how-do-i-set-my-dns-when-resolv-conf-is-being-overwritten)
 
 
