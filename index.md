@@ -18,4 +18,4 @@
     - [PostgreSQL](db/postgresql.md)
 4. ОС
     - [Linux](linux/linux-notes-index.md) 
-    - [MACOS](macos/macos-notes-index.md)
+    - [MacOS](macos/macos-notes-index.md)
