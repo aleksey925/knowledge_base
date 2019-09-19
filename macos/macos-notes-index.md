@@ -404,12 +404,9 @@ brew rm $(join <(brew leaves) <(brew deps FORMULA))
 brew tap <REPO>
 ```
 
-Список нужных реппозиториев:
+Список полезных реппозиториев:
 
-- homebrew/boneyard
-- homebrew/dupes
-- homebrew/versions
-- homebrew/x11
+- caskroom/cask
 
 
 <a name='Кэш-brew'></a>
