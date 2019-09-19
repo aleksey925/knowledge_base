@@ -431,17 +431,17 @@ smplayer), а то сперва произойдет даунмикс плеер
 
 - установить resolvconf
 
-  ```bash
-  sudo apt-get install resolvconf
-  ```
+    ```bash
+    sudo apt-get install resolvconf
+    ```
 
 - открыть файл `/etc/resolvconf/resolv.conf.d/head` и добавить в конец адреса
   нужных dns серверов.
   
-  ```
-  nameserver 8.8.8.8
-  nameserver 8.8.4.4
-  ``` 
+    ```
+    nameserver 8.8.8.8
+    nameserver 8.8.4.4
+    ``` 
 
 - выполнить в консоли `sudo resolvconf -u`
 
