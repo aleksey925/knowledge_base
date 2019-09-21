@@ -295,7 +295,8 @@ print(result)
 <a name='#Реализация-GC'></a>
 ### Реализация GC
 
-[Как устроен garbage collector в Go 1.9 - Андрей Дроздов, Avito](https://www.youtube.com/watch?time_continue=2&v=CX4GSErFenI)
+[Как устроен garbage collector в Go 1.9 - Андрей Дроздов, Avito](https://www.youtube.com/watch?time_continue=2&v=CX4GSErFenI
+[Механизмы выделения памяти в Go - habr](https://m.habr.com/ru/company/ruvds/blog/442648/)
 
 
 <a name='Логирование-данных-о-потребляемой-памяти'></a>
