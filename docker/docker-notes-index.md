@@ -16,14 +16,18 @@
     - [Обзор контейнеризации (что это, чем отличается от виртуализации, уровень безопасности)](#Обзор-контейнеризации-(что-это,-чем-отличается-от-виртуализации,-уровень-безопасности))
     - [Устройство докер образов](#Устройство-докер-образов)
 
-2. <h3>[Примеры запуска сервисов](#Примеры-запуска-сервисов)</h3>
+3. <h3>[Примеры запуска сервисов](#Примеры-запуска-сервисов)</h3>
     
     - [Запуск PostgreSQL](#Запуск-PostgreSQL)
     - [Запуск RabbitMQ](#Запуск-RabbitMQ)
     
-3. <h3>[Ведение разработки вместе с docker](#Ведение-разработки-вместе-с-docker)</h3>
+4. <h3>[Ведение разработки вместе с docker](#Ведение-разработки-вместе-с-docker)</h3>
 
     - [Запуск простого web-приложения в образе созданном из Dockerfile](#Запуск-простого-web-приложения-в-образе-созданном-из-Dockerfile)
+
+5. <h3>[docker-compose](#docker-compose)</h3>
+
+    - [Применение DRY к docker-compose.yml](#Применение-DRY-к-docker-compose.yml)
   
 
 <a name='Введение'></a>
@@ -519,3 +523,120 @@ docker rmi 39e2e3bc092c
 - [Docker: build и пример Dockerfile](https://rtfm.co.ua/docker-build/) - заметка
   основана на данной статье
 - [Погружаемся в Docker: Dockerfile и коммуникация между контейнерами](https://habr.com/ru/company/infobox/blog/240623/)
+
+
+
+<a name='docker-compose'></a>
+## docker-compose
+
+
+<a name='Применение-DRY-к-docker-compose.yml'></a>
+### Применение DRY к docker-compose.yml
+
+docker-compose это отличная утилита, которая позволяет управлять запуском 
+группы контейнеров. Довольно часто описание нескольких контейнеров очень 
+похожее и из-за этого docker-compose.yml содержит много дублирующегося кода, 
+который тяжело поддерживать. К счатью, данную проблему можно решить при помощи 
+aliases и extension fields.
+
+Формат YAML позволяет создавать якоря и алиасы. С помощью якоря можно 
+определить элемент в документе YAML, а затем ссылаться на этот элемент 
+(используя алиас) позже в том же документе. Якорь можно обозначить с помощью
+символа &, алиас - с помощью символа *. Ниже приведен пример YAML-файла с 
+якорем и алиасом: 
+
+```docker-compose
+base: &base
+  name: Everyone has same name
+
+foo:
+  <<: *base
+  age: 10
+
+bar:
+  <<: *base
+  age: 20
+```
+
+После прочтения файла парсером YAML результат будет следующим:
+
+```docker-compose
+foo:
+  name: Everyone has same name
+  age: 10
+
+bar:
+  name: Everyone has same name
+  age: 20
+```
+
+Использование якорей и алиасов “в чистом” виде в конфигурационных файлах 
+docker-compose.yml ранее было несколько неудобным и неочевидным, однако 
+начиная с версии 3.4 добавлена поддержка расширенных полей (или полей р
+асширений - extension fields). 
+
+Теперь любой ключ верхнего уровня, начинающийся с `x-` в файле 
+docker-compose.yml, будет проигнорирован утилитой docker-compose и самим Docker
+Engine. Такие расширения можно использовать для определения части сервиса, 
+содержащей только общие параметры.
+
+Рассмотрим описанное выше на примере. Ниже представлено содержимое 
+среднестатистического docker-compose.yml файла, который описывает запуск 2 
+приложений: 
+ 
+```docker-compose
+version: "2.1"
+
+services:
+  app1:
+    restart: on-failure
+    image: python:3.7.4-alpine
+    env_file:
+      - .env
+    environment:
+      - FOO=0
+    command: python3 -c "print('Hello from app1')"
+
+  app2:
+    restart: on-failure
+    image: python:3.7.4-alpine
+    env_file:
+      - .env
+    environment:
+      - BAR=1
+    command: python3 -c "print('Hello from app2')"
+```
+
+Как можно заметить, часть конфигурации идентична для обоих приложений. Давайте 
+избавимся от дублирования при помощи aliases и extension fields.
+
+```docker-compose
+version: "2.1"
+
+x-app-base: &app-base
+  restart: on-failure
+  image: python:3.7.4-alpine
+  env_file:
+    - .env
+
+services:
+  app1:
+    <<: *app-base
+    environment:
+      - FOO=0
+    command: python3 -c "print('Hello from app1')"
+
+  app2:
+    <<: *app-base
+    environment:
+      - BAR=1
+    command: python3 -c "print('Hello from app2')"
+      https_proxy: $https_proxy
+```
+
+P.S. Для того, чтобы проверить не был ли нарушен синтаксис, можно использовать
+`docker-compose config`.
+
+Полезные ссылки:
+
+- [Применение DRY к docker-compose.yml](https://ealebed.github.io/posts/2018/%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D0%BD%D0%B5%D0%BD%D0%B8%D0%B5-dry-%D0%BA-docker-compose.yml/)
