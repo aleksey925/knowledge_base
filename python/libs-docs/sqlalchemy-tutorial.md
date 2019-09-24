@@ -4,10 +4,15 @@ SQLAlchemy
 # Оглавление
 
 1. <h3>[Общее](#Общее)</h3>
+
     - [Обзор возможностей](#Обзор-возможностей)
+    - [В чем разница между flush и commit](#В-чем-разница-между-flush-и-commit)
+    - [Работа с сессиями](#Работа-с-сессиями)
 
 2. <h3>[Проблемы](#Проблемы)</h3>
+
     - [n+1 select](#n+1-select)
+
 
 
 <a name='Общее'></a>
@@ -21,8 +26,20 @@ SQLAlchemy
  [Денис Катаев, Tinkoff.ru «SQLAlchemy: Python vs Raw SQL»](https://www.youtube.com/watch?v=jUGK-CtM-Mk)
 - оптимизация [Ускорение SQLAlchemy для архитектурных космонавтов / Алексей Старков (Qrator Labs)](https://www.youtube.com/watch?v=flA2lEl2a0M)
 
- 
-    
+
+<a name='В-чем-разница-между-flush-и-commit'></a>
+### В чем разница между flush и commit
+
+[SQLAlchemy: Какая разница между flush() и commit()? - python | Qaru](http://qaru.site/questions/26368/sqlalchemy-whats-the-difference-between-flush-and-commit)
+
+
+<a name='Работа-с-сессиями'></a>
+### Работа с сессиями
+
+[БД в SQLAlchemy: правильно работаем с сессиями | OTUS](https://otus.ru/nest/post/250/)
+
+
+
 <a name='Проблемы'></a>
 ## Проблемы
 
