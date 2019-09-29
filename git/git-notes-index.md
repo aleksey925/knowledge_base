@@ -14,6 +14,7 @@ Git
 
         - [Установка](#Установка)
         - [Начальная настройка](#Начальная-настройка)
+        - [Автодополнение в MacOS](#Автодополнение-в-MacOS)
     
     - <h4>[Решение проблем](#Решение-проблем)</h4>
     
@@ -22,7 +23,6 @@ Git
 3. <h3>[Локальные репозитории](#Локальные-репозитории)</h3>
 
     - [Общее](#Общее)
-    - [Начальная настройка](#Начальная-настройка)
     - [Перезапись истории](#Перезапись-истории)
     - [Локальный gitignore](#Локальный-gitignore)
     
@@ -84,6 +84,36 @@ git config --global core.safecrlf true
 переменную окружения:
 
 - `LANG: ru_RU.UTF8`
+
+
+<a name='Автодополнение-в-MacOS'></a>
+#### Автодополнение в MacOS
+
+По умолчанию в терминале MacOS для git отключено автодоплнение. Исправить это
+можно следующим образом:
+
+- выполнить поиск в системе скрипта `git-completion.bash`
+
+    ```bash
+    sudo find / -type f -name "git-completion.bash"
+    ```
+    
+    Результат выполнения команды будет примерно такой:
+    
+    ```
+    MBP-Aleksej:~ aleksey$ sudo find / -type f -name "git-completion.bash"
+    /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash
+    ```
+
+- после того как путь к скрипту найден необходимо скопировать его в папку
+    `/usr/local/etc/bash_completion.d/git-completion.bash`.
+  
+    ```
+    sudo cp /Library/Developer/CommandLineTools/usr/share/git-core/git-completion.bash /usr/local/etc/bash_completion.d/git-completion.bash 
+    ```
+
+Теперь если открыть новое окно терминала, то там будет доступно автодополнение 
+при вводе команд для git. 
 
 
 <a name='Решение-проблем'></a>

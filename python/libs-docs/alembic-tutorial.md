@@ -354,4 +354,5 @@ def downgrade():
 ```
 
 Полезные ссылки:
-- https://www.techonthenet.com/sqlite/foreign_keys/foreign_delete.php
+
+- [SQLite: Foreign Keys with Cascade Delete](https://www.techonthenet.com/sqlite/foreign_keys/foreign_delete.php)
