@@ -1,0 +1,11 @@
+image: registry.hub.docker.com/alex925/knowledge-base-generator:0.1.0
+
+stages:
+  - build_and_delpoy_job
+
+variables:
+  MODE: "prod"
+
+build_and_delpoy_job:
+  stage: build_and_delpoy_job
+  script: cd $BASE_DIR && sh ./tools/build_and_public_on_ci.sh
