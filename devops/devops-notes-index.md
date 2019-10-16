@@ -66,3 +66,6 @@ https://stackoverflow.com/questions/52445475/git-pull-with-access-token-git-push
 GITHUB_USER and GITHUB_TOKEN - переменную нельзя помечать protected
 
 https://aleksey925:95b606dbeba172a8ab34e7c73832f9aa288f3103@github.com/aleksey925/tets.git
+
+
+https://habr.com/ru/company/softmart/blog/309380/
