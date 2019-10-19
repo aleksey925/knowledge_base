@@ -18,6 +18,10 @@ Python
     - <h4>[time](#time)</h4>
         
         - [Неожиданности при использовании strptime](#Неожиданности-при-использовании-strptime)
+     
+    - <h4>[contextlib](#contextlib)</h4>
+    
+        - [Решение проблемы большого количества вложенных with](#Решение-проблемы-большого-количества-вложенных-with)
 
 4. <h3>[Типы данных](#Типы-данных)</h3>
 
@@ -226,6 +230,77 @@ import time
 os.environ['TZ'] = 'Europe/Moscow'
 print(time.strptime('Sat Mar 21 00:00:00 MSK 2015', '%a %b %d %H:%M:%S %Z %Y'))
 ```
+
+
+
+<a name='contextlib'></a>
+### contextlib
+
+<a name='Решение-проблемы-большого-количества-вложенных-with'></a>
+#### Решение проблемы большого количества вложенных with
+
+Иногда бывают ситуации, когда необходимо использовать большое количество
+вложенных конструкций with или в одной кострукции with необходимо работать с 
+несколькими объектами. И в этих случаях, код становится некрасивым, ухудшается  
+его читаемость, а количество симвлов в строке переваливает далеко за 80.
+
+Эта ситуация неприятная и ее хочется как-то решить. К счатью, в стандартной 
+библиотеке есть класс `contextlib.ExitStack`, который решает описанную выше 
+проблему.
+
+Для того, чтобы показать как работать с ним, предположим, что у нас есть 2 
+класса: Foo и Spam.
+
+```python
+class Foo:
+    def __enter__(self):
+        print('enter Foo')
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print('exit Foo')
+
+    def work(self):
+        print('work Foo')
+
+
+class Spam:
+    def __enter__(self):
+        print('enter Spam')
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print('exit Spam')
+
+    def work(self):
+        print('work Spam')
+```
+ 
+При классическом подходе работа с ними будет выглядеть так:
+
+```python
+with Foo() as foo, Spam() as spam:
+    foo.work()
+    spam.work()
+```
+
+Но, при использовании `ExitStack`, код выше можно переписать следующим образом:
+
+```python
+import contextlib
+
+with contextlib.ExitStack() as stack:
+    foo = stack.enter_context(Foo())
+    spam = stack.enter_context(Spam())
+    foo.work()
+    spam.work()
+```
+
+
+>Чаще всего проблема с большим количеством вложенных with встречается при 
+>работе c асинхронным кодом. Для того, чтобы работать с асинхронными 
+>менеджерами контекста есть специальный класс, который назвается 
+>`contextlib.AsyncExitStack` 
 
 
 
