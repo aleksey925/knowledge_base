@@ -303,6 +303,10 @@ with contextlib.ExitStack() as stack:
 >`contextlib.AsyncExitStack` 
 
 
+Полезные ссылки:
+
+- [contextlib - ExitStack](https://docs.python.org/3.7/library/contextlib.html#contextlib.ExitStack)
+- [contextlib - AsyncExitStack](https://docs.python.org/3.7/library/contextlib.html#contextlib.AsyncExitStack)
 
 <a name='Типы-данных'></a>
 ## Типы данных
