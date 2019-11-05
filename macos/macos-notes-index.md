@@ -12,7 +12,7 @@
     - [Изменение значения TTL](#Изменение-значения-TTL)
     - [Отключение SIP](#Отключение-SIP)
     - [Отключение Spotlight](#Отключение-Spotlight)
-    - [Отключение уведомления "default interactive shell is now zsh"](#Отключение-уведомления-"default-interactive-shell-is-now-zsh")
+    - [Отключение уведомления "default interactive shell is now zsh"](#Отключение-уведомления-default-interactive-shell-is-now-zsh)
     - [Создание MacOS приложения из простого скрипта](#Создание-MacOS-приложения-из-простого-скрипта)
     
 2. <h3>[Установка/удаление программ](#Установка/удаление-программ)</h3>
@@ -306,7 +306,7 @@ sudo mdutil -a -i on
 - [Как ускорить работу Mac и сократить расход батареи с помощью Spotlight](https://iphonegeek.me/instructions/dlya-chajnikov/255-kak-uskorit-rabotu-mac-i-sokratit-rashod-batarei-s-pomoschyu-spotlight.html)
 
 
-<a name='Отключение-уведомления-"default-interactive-shell-is-now-zsh"'></a>
+<a name='Отключение-уведомления-default-interactive-shell-is-now-zsh'></a>
 ### Отключение уведомления "default interactive shell is now zsh"
 
 После обновления на macos calatina при открытии терминала всегда появляется 
