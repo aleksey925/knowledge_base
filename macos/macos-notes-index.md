@@ -199,23 +199,42 @@ sys.exit(app.exec_())
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
     <plist version="1.0">
-      <dict>
-        <key>CFBundleDocumentTypes</key>
-        <array>
-          <dict>
-            <key>CFBundleTypeIconFile</key>
-            <string>app.icns</string>
-          </dict>
-        </array>
-        <key>CFBundleExecutable</key>
-        <string>simpleapp</string>
-        <key>CFBundleIconFile</key>
-        <string>app.icns</string>
-        <key>CFBundleInfoDictionaryVersion</key>
-        <string>6.0</string>
-        <key>CFBundleName</key>
-        <string>Simple app</string>
-      </dict>
+        <dict>
+            <key>CFBundleDevelopmentRegion</key>
+            <string>English</string>
+            <key>CFBundleExecutable</key>
+            <string>serialnotifier.sh</string>
+            <key>CFBundleIconFile</key>
+            <string>app-icon.icns</string>
+            <key>CFBundleInfoDictionaryVersion</key>
+            <string>6.0</string>
+            <key>CFBundleName</key>
+            <string>Simple app</string>
+            <key>CFBundlePackageType</key>
+            <string>APPL</string>
+            <key>CFBundleIdentifier</key>
+            <string>org.python.python</string>
+            <key>CFBundleSignature</key>
+            <string>????</string>
+            <key>CFBundleGetInfoString</key>
+            <string>Simple app 1.0.0</string>
+            <key>CFBundleShortVersionString</key>
+            <string>1.0.0</string>
+            <key>CFBundleVersion</key>
+            <string>1.0.0</string>
+            <key>LSApplicationCategoryType</key>
+            <string>public.app-category.entertainment</string>
+    
+            <key>NSRequiresAquaSystemAppearance</key>
+            <string>false</string>
+            <key>NSHighResolutionCapable</key>
+            <true/>
+    
+            <key>LSRequiresNativeExecution</key>
+            <string>YES</string>
+            <key>LSMinimumSystemVersion</key>
+            <string>10.8</string>
+        </dict>
     </plist>
     ```
 - И в качестве завершающего этапа, необходимо к имени папки, которую мы 
