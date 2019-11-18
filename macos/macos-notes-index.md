@@ -203,9 +203,9 @@ sys.exit(app.exec_())
             <key>CFBundleDevelopmentRegion</key>
             <string>English</string>
             <key>CFBundleExecutable</key>
-            <string>serialnotifier.sh</string>
+            <string>run.sh</string>
             <key>CFBundleIconFile</key>
-            <string>app-icon.icns</string>
+            <string>app.icns</string>
             <key>CFBundleInfoDictionaryVersion</key>
             <string>6.0</string>
             <key>CFBundleName</key>
@@ -227,8 +227,6 @@ sys.exit(app.exec_())
     
             <key>NSRequiresAquaSystemAppearance</key>
             <string>false</string>
-            <key>NSHighResolutionCapable</key>
-            <true/>
     
             <key>LSRequiresNativeExecution</key>
             <string>YES</string>
