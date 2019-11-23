@@ -78,9 +78,8 @@ docker compose
 - `docker system prune -a` - удаляет все containers, networks, images и 
   опционально volumes
 - `docker volume prune` - удаление всех volume
-- `docker-compose rm` - удаляет все остановленные контейнеры
-- `docker-compose rm -v` - удаляет все остановленные контейнеры и все анонимные 
-  volumes прикрепленные к этим контейнерам
+- `docker-compose down` - останавливает containers и удаляет containers, 
+  networks, volumes, и images
 
 **Остановка контейнеров**
 
