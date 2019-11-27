@@ -1869,6 +1869,7 @@ P.S. учитывая сложность и множество нюансов р
 
 
 Материалы используемые для написания заметки:
+
 - [Garbage collector & a bit of memory management - Кирилл Лашкевич - Python Meetup 27.09.2013](https://www.youtube.com/watch?v=6Iw6n43mrVI)
 - [Всё, что нужно знать о сборщике мусора в Python - Habr](https://habr.com/post/417215/)
 - [Удаление объектов сборщиком мусора - asvetlov](https://asvetlov.blogspot.com/2013/05/gc.html)
