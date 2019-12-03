@@ -14,9 +14,10 @@
     - [git](git/git-notes-index.md)
     - [docker](docker/docker-notes-index.md)
     - [web-servers](web-servers/web servers-notes-index.md)
-3. Базы данных
+3. [DevOps](devops/devops-notes-index.md)
+4. Базы данных
     - [Теория баз данных](db/database-theory-index.md)
     - [PostgreSQL](db/postgresql.md)
-4. ОС
+5. ОС
     - [Linux](linux/linux-notes-index.md) 
     - [MacOS](macos/macos-notes-index.md)
