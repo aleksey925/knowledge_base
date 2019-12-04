@@ -2415,5 +2415,5 @@ print(result)
 ### Работа с датой и временем
 
 - [arrow - замена стандратного datetime](https://arrow.readthedocs.io/en/latest/)
-- [Питон: времена, даты и временные зоны - Андрей Светлов](https://asvetlov.blogspot.com/2011/02/date-and-time.html)
+- [Питон: времена, даты и временные зоны - Андрей Светлов](https://asvetlov.blogspot.com/2011/02/date-and-time.html), [локальная копия](https://cloud.mail.ru/public/2DTf/245vSkJmp)
 - [Работа с датой и временем](../computer-science/computer-science-index.md#Работа-с-датой-и-временем)
