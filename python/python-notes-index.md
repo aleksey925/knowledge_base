@@ -2414,5 +2414,6 @@ print(result)
 <a name='Работа-с-датой-и-временем'></a>
 ### Работа с датой и временем
 
+- [arrow - замена стандратного datetime](https://arrow.readthedocs.io/en/latest/)
 - [Питон: времена, даты и временные зоны - Андрей Светлов](https://asvetlov.blogspot.com/2011/02/date-and-time.html)
 - [Работа с датой и временем](computer-science/computer-science-index.md#Работа с датой и временем)
