@@ -21,7 +21,8 @@ Python
 3. <h3>[Типы данных](#Типы-данных)</h3>
 
     - <h4>[Строки](#Строки)</h4>
-
+        
+        - [Реализация str в CPython](#Реализация-str-в-CPython)
         - [Вычисление длинны строки в байтах](#Вычисление-длинны-строки-в-байтах)
     
     - <h4>[Кортежи](#Кортежи)</h4>
@@ -273,6 +274,12 @@ with contextlib.ExitStack() as stack:
 
 <a name='Строки'></a>
 ### Строки
+
+<a name='Реализация-str-в-CPython'></a>
+#### Реализация str в CPython
+
+[Реализация строкового типа в CPython](https://habr.com/ru/post/480324/), [копия](https://cloud.mail.ru/public/Dzw2/jZ3H5z5Rz)
+
 
 <a name='Вычисление-длинны-строки-в-байтах'></a>
 #### Вычисление длинны строки в байтах
@@ -850,6 +857,7 @@ entries =  [[-9092791511155847987, 'timmy', 'red'],
 - [Faster, more memory efficient and more ordered dictionaries on PyPy](https://morepypy.blogspot.com/2015/01/faster-more-memory-efficient-and-more.html)
 - [Are dictionaries ordered in Python 3.6+? | StackOverflow](https://stackoverflow.com/questions/39980323/are-dictionaries-ordered-in-python-3-6)
 - [Реализация словаря в Python - habr](https://m.habr.com/ru/company/otus/blog/448350/)
+- [Немного внутренностей словарей в CPython (и PyPy)](https://habr.com/ru/post/432996/), [копия](https://cloud.mail.ru/public/5J7t/2tUtjwNpD)
 
 
 <a name='Файлы'></a>
