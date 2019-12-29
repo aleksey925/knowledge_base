@@ -25,6 +25,10 @@ Python
         - [Реализация str в CPython](#Реализация-str-в-CPython)
         - [Вычисление длинны строки в байтах](#Вычисление-длинны-строки-в-байтах)
     
+    - <h4>[Целые числа](#Целые-числа)</h4>
+    
+        - [Реализация int в CPython](#Реализация-int-в-CPython)
+    
     - <h4>[Кортежи](#Кортежи)</h4>
     
         - [Реализация tuple в CPython](#Реализация-tuple-в-CPython)
@@ -289,6 +293,17 @@ with contextlib.ExitStack() as stack:
 text = 'Какая-то строка'
 print(len(text.encode('utf8')))
 ```
+
+
+<a name='Целые-числа'></a>
+### Целые числа
+
+
+<a name='Реализация-int-в-CPython'></a>
+#### Реализация int в CPython
+
+[Реализация целого типа в CPython](https://habr.com/ru/post/455114/), [копия](https://cloud.mail.ru/public/dLCi/4pPxztZsT)
+
 
 <a name='Кортежи'></a>
 ### Кортежи
