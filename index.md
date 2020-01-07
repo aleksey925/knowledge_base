@@ -19,5 +19,7 @@
     - [Теория баз данных](db/database-theory-index.md)
     - [PostgreSQL](db/postgresql.md)
 5. ОС
-    - [Linux](linux/linux-notes-index.md) 
+    - Linux
+        - [Linux](linux/linux-notes-index.md) 
+        - [Мануалы](linux/manuals-index.md)
     - [MacOS](macos/macos-notes-index.md)
