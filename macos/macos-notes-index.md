@@ -39,6 +39,9 @@
         - [Установка mpi4py](#Установка-mpi4py)
         - [Установка numpy](#Установка-numpy)
 
+3. <h3>[Устранение проблем](#Устранение-проблем)</h3>
+    
+    - [Не удаляется VPN соединение](#Не-удаляется-VPN-соединение)
 
 
 <a name='Настройка-системы'></a>
@@ -608,3 +611,27 @@ pip3 install mpi4py
 brew install homebrew/python/numpy --with-python3
 ```
 
+
+
+<a name='Устранение-проблем'></a>
+## Устранение проблем
+
+<a name='Не-удаляется-VPN-соединение'></a>
+### Не удаляется VPN соединение
+
+Иногда может случиться так, что у вас не получается удалить старое VPN 
+соединение (кнопка удаления не в меню "Сеть" не активна и в меню "Профили"
+профиль для вашего VPN уже удален). 
+В этом случае для того, чтобы избавиться от этого содинения вам придется 
+удалить информацию о всех VPN содинениях.
+
+```bash
+sudo cp /Library/Preferences/com.apple.networkextension.plist /Library/Preferences/com.apple.networkextension.plist.old
+sudo rm /Library/Preferences/com.apple.networkextension.plist 
+```
+
+P.S. Если у вас не получается удадить файл, то проверьте отключен ли у вас SIP. 
+
+Полезные ссылки:
+
+- [Where macOS keeps VPN Network configuration?](https://apple.stackexchange.com/questions/315797/where-macos-keeps-vpn-network-configuration)
