@@ -25,6 +25,7 @@ Git
     - [Общее](#Общее)
     - [Перезапись истории](#Перезапись-истории)
     - [Локальный gitignore](#Локальный-gitignore)
+    - [Авторизация при помощи токена](#Авторизация-при-помощи-токена)
     
 <a name='Теория'></a>
 ## Теория
@@ -265,3 +266,9 @@ git push -f origin master
 
 
 Ответ нашел [здесь](https://stackoverflow.com/questions/1753070/how-do-i-configure-git-to-ignore-some-files-locally)
+
+
+<a name='Авторизация-при-помощи-токена'></a>
+### Авторизация при помощи токена
+
+[git pull with access token, git push with username / password](https://stackoverflow.com/questions/52445475/git-pull-with-access-token-git-push-with-username-password)
