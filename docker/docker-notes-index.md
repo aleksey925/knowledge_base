@@ -81,7 +81,7 @@ docker compose
 - `docker-compose down -v` - останавливает containers и удаляет containers, 
   networks, volumes, и images
   
-**Перезапуск запущенного контейнера с пересборкой**
+**Перезапуск работающего контейнера с пересборкой**
 
 - `docker-compose up -d --no-deps --build app` - пересобирает образ сервиса 
     `app`, создает новый контейнер на основе нового образа, останавливает 
