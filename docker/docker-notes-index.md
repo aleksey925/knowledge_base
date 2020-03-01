@@ -114,7 +114,7 @@ docker compose
 Для того, чтобы создать пользователя в дистрибутиве alpine необходимо выполнить:
 
 ```
-RUN addgroup app_user && adduser -G app_user -s /bin/sh -D app_user
+RUN addgroup app_user && adduser -G app_user -s /bin/ash -D app_user
 ```
 
 В debian подобных дистрибутивах это можно сделать так:
@@ -132,9 +132,55 @@ USER app_user
 
 После этого, все запускаемые процессы будут выпоняться от имени `app_user`.
 
+**Проблемы**
+
+Некоторые серверы приложений требуют для своего запуска root прав. В этом 
+случае нужно будет не только просто создать нового пользователя, но и немного 
+настроить работу команды sudo. 
+
+Сделать это можно при помощи редактирования файла `/etc/sudoers`, который 
+хранит настройки используемые командой sudo. Например, если мы хотим позволить 
+нашему пользователю `app_user` запускать от имени root web-сервер nginx-unit, 
+то необходимо в файле `/etc/sudoers` разместить:
+
+```
+app_user ALL=(root) NOPASSWD: /usr/sbin/unitd
+```
+
+Такая конфигурация позволит пользователю `app_user` запускать unitd с любыми 
+аргументами, если это не позволительно, то можете в настройках ограничить еще
+аргументы с которыми может запускаться приложение. Делается это так:
+
+```
+app_user ALL=(root) NOPASSWD: /usr/sbin/unitd --no-daemon --control unix:/var/run/control.unit.sock
+```
+
+Кроме этого, иногда еще может пригодиться тег `SETENV`, который позволяет 
+передать пользователю root все переменные окружения доступные пользователю 
+`app_user`. Такое поведение полезно в том случае, если запускаемое приложение 
+считывает настройки из переменных окружения.
+
+В этом случае в `/etc/sudoers` нужно разместит следующую строку:
+
+```
+app_user ALL=(root) NOPASSWD:SETENV: /usr/sbin/unitd
+```
+
+И при использовании sudo указывать ключ `-E`.
+
+При работе с дистрибутивом alpine после внесения изменений в `/etc/sudoers` 
+может возникать ошибка `sudo: setrlimit(RLIMIT_CORE): Operation not permitted`,
+исправить ее можно добавив `Set disable_coredump false` в `/etc/sudo.conf`.
+
+
 Использованные материалы:
 
 - [Пользователь в Docker](https://habr.com/ru/post/448480/)
+- [Sudo: setrlimit(RLIMIT_CORE): Operation not permitted - ask fedora](https://ask.fedoraproject.org/t/sudo-setrlimit-rlimit-core-operation-not-permitted/4223)
+- [How to allow user to preserve environment with sudo? - superuser](https://superuser.com/questions/636283/how-to-allow-user-to-preserve-environment-with-sudo)
+- [Редактирование файла sudoers в Ubuntu и CentOS - 8host](https://www.8host.com/blog/redaktirovanie-fajla-sudoers-v-ubuntu-i-centos/)
+- [Настройка sudo под Linux - michurin.net](http://www.michurin.net/tools/sudo.html)
+- [Полезные настройки Sudoers для ‘sudo’ в Linux - blog.sedicomm](http://blog.sedicomm.com/2018/03/21/poleznye-nastrojki-sudoers-dlya-sudo-v-linux/)
 
 
 <a name='Оптимизация-размера-образа'></a>
