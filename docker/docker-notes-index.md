@@ -73,10 +73,10 @@ docker compose
 
 - `docker rm -vf $(docker ps -a -q)` - удаляет все контейнеры
 - `docker rmi -f $(docker images -a -q)` - удаляет все образы
-- `docker system prune` - удаляет все не используемые containers, networks, 
-  images и опционально volumes
-- `docker system prune -a` - удаляет все containers, networks, images и 
-  опционально volumes
+- `docker system prune` - удаляет все images, containers, networks (при 
+    использовании ключа --volumes будут удалены еще и volumes), которые не 
+    связаны с контейнерами. Если добавить ключ `-a`, то команда удалит еще и все 
+    остановленные контейнеры и их ресурсы.
 - `docker volume prune` - удаление всех volume
 - `docker-compose down -v` - останавливает containers и удаляет containers, 
   networks, volumes, и images
