@@ -43,6 +43,9 @@
     
     - [Не удаляется VPN соединение](#Не-удаляется-VPN-соединение)
 
+4. <h3>Разное</h3>
+    
+    - [Создание автозагрузочной флешки с windows](#Создание-автозагрузочной-флешки-с-windows)
 
 <a name='Настройка-системы'></a>
 ## Настройка системы
@@ -635,3 +638,93 @@ P.S. Если у вас не получается удадить файл, то 
 Полезные ссылки:
 
 - [Where macOS keeps VPN Network configuration?](https://apple.stackexchange.com/questions/315797/where-macos-keeps-vpn-network-configuration)
+
+
+
+<a name='Разное'></a>
+## Разное
+
+<a name='Создание-автозагрузочной-флешки-с-windows'></a>
+### Создание автозагрузочной флешки с windows
+
+Для создания автозагрузочной флешки сделайте следующее:
+
+1. Подключите флешку к ПК
+
+2. Откройте терминал и введите там команду
+
+    ```
+    diskutil list
+    ``` 
+    
+    ```
+    MBP-Aleksej:~ aleksey$ diskutil list
+    /dev/disk0 (internal, physical):
+       #:                       TYPE NAME                    SIZE       IDENTIFIER
+       0:      GUID_partition_scheme                        *1.0 TB     disk0
+       1:                        EFI EFI                     314.6 MB   disk0s1
+       2:                 Apple_APFS Container disk1         1.0 TB     disk0s2
+    
+    /dev/disk1 (synthesized):
+       #:                       TYPE NAME                    SIZE       IDENTIFIER
+       0:      APFS Container Scheme -                      +1.0 TB     disk1
+                                     Physical Store disk0s2
+       1:                APFS Volume Macintosh HD — данные   185.7 GB   disk1s1
+       2:                APFS Volume Preboot                 84.1 MB    disk1s2
+       3:                APFS Volume Recovery                528.1 MB   disk1s3
+       4:                APFS Volume VM                      1.1 GB     disk1s4
+       5:                APFS Volume Macintosh HD            11.1 GB    disk1s5
+    
+    /dev/disk2 (external, physical):
+       #:                       TYPE NAME                    SIZE       IDENTIFIER
+       0:      GUID_partition_scheme                        *7.8 GB     disk2
+       1:                        EFI EFI                     209.7 MB   disk2s1
+       2:       Microsoft Basic Data WIN10                   7.6 GB     disk2s2
+    ```
+    
+    Данная команда позволила нам узнать идентификатор, который система присвоила
+    нашей флешке. В моем случае флешка называется `/dev/disk2`.
+
+3. Теперь необходимо отформатировать флешку для работы в windows.
+
+    ```
+    diskutil eraseDisk MS-DOS "LIVEUSB" GPT /dev/disk2
+    ```
+    
+    ```
+    Started erase on disk2
+    Unmounting disk
+    Creating the partition map
+    Waiting for partitions to activate
+    Formatting disk2s2 as MS-DOS (FAT) with name LIVEUSB
+    512 bytes per physical sector
+    /dev/rdisk2s2: 14814936 sectors in 1851867 FAT32 clusters (4096 bytes/cluster)
+    bps=512 spc=8 res=32 nft=2 mid=0xf8 spt=32 hds=255 hid=411648 drv=0x80 bsec=14843904 bspf=14468 rdcl=2 infs=1 bkbs=6
+    Mounting disk
+    Finished erase on disk2
+    ```
+    
+    Если при форматировании фозникли ошибки, то необходимо выполнить немного другую
+    команду:
+    
+    ```
+    diskutil eraseDisk MS-DOS "LIVEUSB" MBR /dev/disk2
+    ```
+
+4. Примонтируем iso образ, который будем устанавливать на флешку
+
+    ```
+    hdiutil mount ~/Downloads/Win10.iso
+    ```
+
+5. Скопируем все файлы из образа на нашу флешку
+
+    ```
+    cp -rp /Volumes/Win10/* /Volumes/LIVEUSB/
+    ```
+
+Отлично, теперь все готово, можно извлечь флешку и использовать.
+
+Полезные ссылки:
+
+- [How Make a Windows 10 USB Using Your Mac - Build a Bootable ISO From Your Mac's Terminal](https://www.freecodecamp.org/news/how-make-a-windows-10-usb-using-your-mac-build-a-bootable-iso-from-your-macs-terminal/)
