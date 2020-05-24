@@ -161,11 +161,11 @@ py -3
 
 1. Заходим на оф. сайт и качаем python версии «embeddable zip file»;
 2. Разархивируем скачанный файл;
-3. Удаляем из извлеченной папки файл с расширенем _pth;
-4. Создаем папку lib, извлекаем туда содержимое файла <версия_python>.zip и 
+3. Удаляем из извлеченной папки файл с расширенем `_pth`;
+4. Создаем папку `lib`, извлекаем туда содержимое файла `<версия_python>.zip` и 
 удаляем этот архив;
-5. Скачиваем скрипт https://bootstrap.pypa.io/get-pip.py и запускаем его при 
-помощи скачанного python. 
+5. Скачиваем скрипт [https://bootstrap.pypa.io/get-pip.py](https://bootstrap.pypa.io/get-pip.py) и запускаем его при 
+помощи скачанного python;
 6. Теперь можно при помощи pip установить все нужные библиотеки. 
 
 
@@ -658,17 +658,29 @@ typedef struct {
 > Ещё необходимо понимать, что в действительности в таблице хранится указатель
 > на объект python`а, а не как изображено.
 
-<details><summary><b>детали</b></summary>
+<details>
+<summary><b>Открыть пример</b></summary>
+
 ![](python-notes-index/dict/impl-dict-in-cpython/add-new-element-1.jpg)
+
 ![](python-notes-index/dict/impl-dict-in-cpython/add-new-element-2.jpg)
+
 ![](python-notes-index/dict/impl-dict-in-cpython/add-new-element-3.jpg)
+
 ![](python-notes-index/dict/impl-dict-in-cpython/add-new-element-4.jpg)
+
 ![](python-notes-index/dict/impl-dict-in-cpython/add-new-element-5.jpg)
+
 ![](python-notes-index/dict/impl-dict-in-cpython/add-new-element-6.jpg)
+
 ![](python-notes-index/dict/impl-dict-in-cpython/add-new-element-7.jpg)
+
 ![](python-notes-index/dict/impl-dict-in-cpython/add-new-element-8.jpg)
+
 ![](python-notes-index/dict/impl-dict-in-cpython/add-new-element-9.jpg)
+
 ![](python-notes-index/dict/impl-dict-in-cpython/add-new-element-10.jpg)
+
 </details>
 
 На данных картинках изображен идеальный случай заполнения словаря, потому что
