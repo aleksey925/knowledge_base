@@ -658,6 +658,9 @@ typedef struct {
 > Ещё необходимо понимать, что в действительности в таблице хранится указатель
 > на объект python`а, а не как изображено.
 
+<details markdown="span">
+    <summary>Показать слайды</summary>
+    
 ![](python-notes-index/dict/impl-dict-in-cpython/add-new-element-1.jpg)
 ![](python-notes-index/dict/impl-dict-in-cpython/add-new-element-2.jpg)
 ![](python-notes-index/dict/impl-dict-in-cpython/add-new-element-3.jpg)
@@ -669,7 +672,9 @@ typedef struct {
 ![](python-notes-index/dict/impl-dict-in-cpython/add-new-element-9.jpg)
 ![](python-notes-index/dict/impl-dict-in-cpython/add-new-element-10.jpg)
 
-На данных картинках изображен идеальный случай заполнения словаря, потому что
+</details>
+
+На данных слайдах изображен идеальный случай заполнения словаря, потому что
 у нас не возникло коллизий (не было ситуаций, когда для разных значений
 вычисленный хэш был одинаковым).
 
@@ -697,10 +702,14 @@ typedef struct {
 котором они лежат в памяти. Это совсем не тот порядок, в котором происходило 
 добавление элементов в словарь.
 
+<details markdown="span">
+    <summary>Показать слайды</summary>
+    
 ![](python-notes-index/dict/impl-dict-in-cpython/print-dict-1.jpg)
 ![](python-notes-index/dict/impl-dict-in-cpython/print-dict-2.jpg)
 ![](python-notes-index/dict/impl-dict-in-cpython/print-dict-3.jpg) 
 
+</details>
 
 **Коллизии**
 
@@ -724,6 +733,9 @@ typedef struct {
 индекса на единицу. Как это делается будет рассмотрено позже, сейчас рассмотрим
 как в общих чертах работает алгоритм "Открытой адресации".
 
+<details markdown="span">
+    <summary>Показать слайды</summary>
+    
 ![](python-notes-index/dict/impl-dict-in-cpython/collision-example-1.jpg)
 ![](python-notes-index/dict/impl-dict-in-cpython/collision-example-2.jpg)
 ![](python-notes-index/dict/impl-dict-in-cpython/collision-example-3.jpg)
@@ -735,6 +747,8 @@ typedef struct {
 ![](python-notes-index/dict/impl-dict-in-cpython/collision-example-9.jpg)
 ![](python-notes-index/dict/impl-dict-in-cpython/collision-example-10.jpg)
 ![](python-notes-index/dict/impl-dict-in-cpython/collision-example-11.jpg) 
+
+</details>
 
 На слайдах выше видно, как происходило добавление новых элементов, как 
 разрешались коллизии (элементы, при добавлении которых произошла коллизия 
