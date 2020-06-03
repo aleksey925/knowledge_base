@@ -80,6 +80,11 @@ docker compose
 - `docker volume prune` - удаляет все volume
 - `docker-compose down -v` - останавливает containers и удаляет containers, 
   networks, volumes, и images
+
+**Запуск**
+
+- `docker run -i -t app /bin/bash` - создает контейнер на основе образа `app` и 
+    запускает там `bash`
   
 **Перезапуск работающего контейнера с пересборкой**
 
