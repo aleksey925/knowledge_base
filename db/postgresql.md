@@ -10,6 +10,8 @@ PostgreSQL
     - [Импортирование дампа БД](#Импортирование-дампа-БД)
 - [Туториалы](#Туториалы)
 - [Оптимизация запросов](#Оптимизация-запросов)
+- [Примеры решения задач](#Примеры-решения-задач)
+    - [Запрет на созадние записей пересекающихся по времени](#Запрет-на-созадние-записей-пересекающихся-по-времени)
 
 
 <a name='Установка-настройка'></a>
@@ -102,3 +104,43 @@ http://pgconfigurator.cybertec.at/ - онлайн конфигуратор postg
  - [Оптимизация запросов. Основы EXPLAIN в PostgreSQL](https://m.habr.com/ru/post/203320/)
  - [Оптимизация запросов. Основы EXPLAIN в PostgreSQL (часть 2)](https://m.habr.com/ru/post/203386/)
  - [Оптимизация запросов. Основы EXPLAIN в PostgreSQL (часть 3](https://m.habr.com/ru/post/203484/)
+
+
+
+<a name='Примеры-решения-задач'></a>
+### Примеры решения задач
+
+
+<a name='Запрет-на-созадние-записей-пересекающихся-по-времени'></a>
+#### Запрет на созадние записей пересекающихся по времени
+
+Данный пример показывает как можно реализовать блокировку на одновременное 
+редактирование одного и тоже поста несколькими пользователями с проверкой на 
+стороне БД. 
+
+Благодаря ограничению tstzrange_constraint в таблице нельзя создать
+несколько записей у которых post_id равен и значения timestamp_start_block и
+timestamp_end_block пересекаются.
+
+```sql
+CREATE TABLE post (
+    id SERIAL PRIMARY KEY,
+    name varchar(20)
+);
+
+CREATE TABLE post_edit_block (
+    id SERIAL PRIMARY KEY,
+    post_id INT REFERENCES post (id),
+    timestamp_start_block TIMESTAMP WITH TIME ZONE,
+    timestamp_end_block TIMESTAMP WITH TIME ZONE
+);
+
+CREATE EXTENSION btree_gist;
+ALTER TABLE post_edit_block
+    ADD CONSTRAINT tstzrange_constraint
+        EXCLUDE USING gist (
+            post_id WITH =,
+            tstzrange(timestamp_start_block, timestamp_end_block, '[]') WITH &&
+        );
+```
+
