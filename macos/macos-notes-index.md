@@ -49,6 +49,7 @@
 4. <h3>[Разное](#Разное)</h3>
     
     - [Создание автозагрузочной флешки с windows](#Создание-автозагрузочной-флешки-с-windows)
+    - [Создание автозагрузочной флешки с linux](#Создание-автозагрузочной-флешки-с-linux)
 
 
 <a name='Настройка-системы'></a>
@@ -786,3 +787,68 @@ P.S. Если у вас не получается удадить файл, то 
 Полезные ссылки:
 
 - [How Make a Windows 10 USB Using Your Mac - Build a Bootable ISO From Your Mac's Terminal](https://www.freecodecamp.org/news/how-make-a-windows-10-usb-using-your-mac-build-a-bootable-iso-from-your-macs-terminal/)
+
+
+<a name='Создание-автозагрузочной-флешки-с-linux'></a>
+### Создание автозагрузочной флешки с linux
+
+1. Подключите флешку
+
+2. Отформатируйте при помощи дисковой утилиты ее в FAT
+
+3. Откройте терминал и введите там команду
+
+    ```
+    diskutil list
+    ``` 
+    
+    ```
+    MBP-Aleksej:~ aleksey$ diskutil list
+    /dev/disk0 (internal, physical):
+       #:                       TYPE NAME                    SIZE       IDENTIFIER
+       0:      GUID_partition_scheme                        *1.0 TB     disk0
+       1:                        EFI EFI                     314.6 MB   disk0s1
+       2:                 Apple_APFS Container disk1         1.0 TB     disk0s2
+    
+    /dev/disk1 (synthesized):
+       #:                       TYPE NAME                    SIZE       IDENTIFIER
+       0:      APFS Container Scheme -                      +1.0 TB     disk1
+                                     Physical Store disk0s2
+       1:                APFS Volume Macintosh HD — данные   185.7 GB   disk1s1
+       2:                APFS Volume Preboot                 84.1 MB    disk1s2
+       3:                APFS Volume Recovery                528.1 MB   disk1s3
+       4:                APFS Volume VM                      1.1 GB     disk1s4
+       5:                APFS Volume Macintosh HD            11.1 GB    disk1s5
+    
+    /dev/disk2 (external, physical):
+       #:                       TYPE NAME                    SIZE       IDENTIFIER
+       0:      GUID_partition_scheme                        *7.8 GB     disk2
+       1:                        EFI EFI                     209.7 MB   disk2s1
+       2:       Microsoft Basic Data WIN10                   7.6 GB     disk2s2
+    ```
+    
+    Данная команда позволила нам узнать идентификатор, который система присвоила
+    нашей флешке. В моем случае флешка называется `/dev/disk2`.
+
+4. Отмонитируем флешку
+
+    ```
+    diskutil unmountDisk /dev/disk2
+    ```
+
+5. Теперь можно приступать к записи образа
+
+    ```
+    sudo dd if=~/Downloads/linuxmint-20-mate-64bit.iso of=/dev/disk2 bs=1m
+    ```
+    
+    После того как команда завершится macos выкинет предупреждение "Вставленный 
+    Вами диск не может быть прочитан на этом компьюетере", это совершенно нормально,
+    вам необходимо нажать "Извлеч".
+
+6. Можно использовать сделанную флешку по назначению
+
+
+Полезные ссылки:
+
+- [How To Create A Bootable Ubuntu USB Drive For Mac In OS X](https://itsfoss.com/create-bootable-ubuntu-usb-drive-mac-os/)
