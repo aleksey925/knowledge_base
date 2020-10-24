@@ -19,6 +19,7 @@ Git
     - <h4>[Решение проблем](#Решение-проблем)</h4>
     
         - [SSL Certificate problem: unable to get local issuer certificate](#SSL-Certificate-problem:-unable-to-get-local-issuer-certificate)
+        - [Не сохраняется логин/пароль](#Не-сохраняется-логин/пароль)
     
 3. <h3>[Локальные репозитории](#Локальные-репозитории)</h3>
 
@@ -117,6 +118,7 @@ git config --global core.safecrlf true
 при вводе команд для git. 
 
 
+
 <a name='Решение-проблем'></a>
 ### Решение проблем
 
@@ -132,6 +134,21 @@ certificate`. Для того, чтобы ее устранить нужно о�
 - `git config --global http.sslVerify false`
 
 Ответ нашел [тут](https://confluence.atlassian.com/bitbucketserverkb/ssl-certificate-problem-unable-to-get-local-issuer-certificate-816521128.html)
+
+
+<a name='Не-сохраняется-логин/пароль'></a>
+#### Не сохраняется логин/пароль
+
+Для включения возможности сохранять credential необходимо выполнить
+
+```
+git config --global credential.helper store
+```
+
+Полезные ссылки:
+
+- [How to save username and password in GIT [GitExtension]?](https://stackoverflow.com/questions/35942754/how-to-save-username-and-password-in-git-gitextension)
+
 
 
 <a name='Локальные-репозитории'></a>

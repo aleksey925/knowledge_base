@@ -34,61 +34,43 @@ alembic init --template generic alembic
 `alembic/env.py` и:
 
 - заменяем все импорты на следующие
+
     ```python
     import sys
     from logging.config import fileConfig
-    from os.path import realpath, dirname, join
+    from pathlib import Path
     
     from alembic import context
-    from sqlalchemy import create_engine
+    from sqlalchemy import engine_from_config
+    from sqlalchemy import pool
     
     # fix ModuleNotFoundError exception
-    sys.path.insert(0, realpath(join(dirname(__file__), '..')))
-    # Импортируем конфиг содержащий настройки для всего проекта 
+    sys.path.insert(0, str(Path(__file__).parent.parent.absolute()))
     import config as app_conf
     from models import Base
     ```
+
 - находим строку `fileConfig(config.config_file_name)` и заменяем ее на
   `fileConfig(config.config_file_name, disable_existing_loggers=False)`. Если
    это не сделать alembic отключит все существующие логгеры. В случае если 
    alembic вызывается исключительно как консольная команда, то это не страшно,
    но если работа с миграциями будет осуществляться из кода приложения, 
-   то дефотное поведение alembic может доставить много хлопот. 
+   то дефотное поведение alembic может доставить много хлопот.
+
 - находим строку `target_metadata = None` и заменяем `None` на `Base.metadata`,
 в итоге получится:
     ```python
     target_metadata = Base.metadata
     ```
-- добавляем функцию get_url, которая будет извлекать из нашего глобального 
-конфига URL для подключения к БД
+
+- добавляем в конфиг alembic URL нашей БД 
+
     ```python
-    def get_url():
-        return app_conf.SQLALCHEMY_DATABASE_URI
+    config.set_main_option('sqlalchemy.url', app_conf.SQLALCHEMY_DATABASE_URI)
     ```
-- модифицируем функции run_migrations_offline и run_migrations_online
+  
+- модифицируем функцию run_migrations_online
     ```python
-    def run_migrations_offline():
-        """Run migrations in 'offline' mode.
-    
-        This configures the context with just a URL
-        and not an Engine, though an Engine is acceptable
-        here as well.  By skipping the Engine creation
-        we don't even need a DBAPI to be available.
-    
-        Calls to context.execute() here emit the given string to the
-        script output.
-    
-        """
-        url = get_url()
-        context.configure(
-            url=url, target_metadata=target_metadata, literal_binds=True,
-            render_as_batch=url.startswith('sqlite')
-        )
-    
-        with context.begin_transaction():
-            context.run_migrations()
-    
-    
     def run_migrations_online():
         """Run migrations in 'online' mode.
     
@@ -96,13 +78,17 @@ alembic init --template generic alembic
         and associate a connection with the context.
     
         """
-        url = get_url()
-        connectable = create_engine(url)
+        connectable = engine_from_config(
+            config.get_section(config.config_ini_section),
+            prefix="sqlalchemy.",
+            poolclass=pool.NullPool,
+        )
     
         with connectable.connect() as connection:
             context.configure(
-                connection=connection, target_metadata=target_metadata,
-                render_as_batch=url.startswith('sqlite')
+                connection=connection,
+                target_metadata=target_metadata,
+                render_as_batch=connectable.url.drivername == 'sqlite'
             )
     
             with context.begin_transaction():
@@ -196,6 +182,19 @@ alembic downgrade 2e8e603859e2
 alembic downgrade -1
 ```
 
+### Добавление миграций в существующие приложение
+
+При добавлении миграций в существующие приложение, где в БД уже созданы все 
+необходимые таблицы в ручную или просто sql скриптами необходимо выполнить 
+команду:
+
+```
+alembic stamp head
+```
+
+чтобы alembic проинциализировался и записал в специальной сервисной таблице
+необходимую мета информацию.
+
 Ссылки на дополнительные материалы:
 
 - [Проект с примерами кода](https://bitbucket.org/alex925/alembic-example/src/master/)
@@ -250,7 +249,7 @@ def apply_migrations(root_dir):
         alembic_commands(argv=('--raiseerr', 'upgrade', 'head',))
     except Exception as err:
         next(logger_cleaner)
-        logging.getLogger('serial-notifier').error(
+        logging.getLogger().error(
             f'Возникла ошибка при попытке применить миграции: {err}'
         )
         raise
