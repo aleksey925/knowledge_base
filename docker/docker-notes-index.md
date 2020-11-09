@@ -35,7 +35,7 @@
 <a name='Установка'></a>
 ### Установка
 
-**Установка на mac os**
+**Mac OS**
 
 Для того, чтобы установить docker на mac os, необходимо:
 
@@ -53,6 +53,45 @@
   SIP то при определенных обстоятельствах будет возникать ошибка `Cannot start 
   service db: b'Mounts denied: EOF'`.
   Инструкцию по отключению sip можно прочитать [тут](../macos/macos-notes-index.md#Отключение-SIP).
+
+**Ubuntu**
+
+- устанавливаем пакеты позволяющие apt работать по https
+
+    ```
+    sudo apt update
+    sudo apt install apt-transport-https ca-certificates curl software-properties-common
+    ```
+
+- добавляем оф. репозиторий docker
+
+    ```
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu <UBUNTU_CODENAME> stable"
+    sudo apt update
+    ```
+
+- устанавливаем docker
+
+    ```
+    sudo apt install docker-ce
+    ```
+
+- разрешаем запуск docker под текущим пользователем без sudo
+
+    ```
+    sudo usermod -aG docker ${USER}
+    ```
+
+- для применения изменений выполняем
+
+    ```
+    su - ${USER}
+    ```
+
+Полезные ссылки:
+
+- [Как установить и использовать Docker в Ubuntu 18.04](https://www.digitalocean.com/community/tutorials/docker-ubuntu-18-04-1-ru)
 
 
 <a name='Общие-сведения'></a>
