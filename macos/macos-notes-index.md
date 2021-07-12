@@ -596,6 +596,13 @@ brew install --cask google-chrome docker
 brew uninstall --cask google-chrome
 ```
 
+<a name='Brew-удаление-не-использующихся-зависимостей'></a>
+#### Удаление не использующихся зависимостей
+
+```
+brew autoremove
+```
+
 <a name='PGK'></a>
 ### PGK
 
