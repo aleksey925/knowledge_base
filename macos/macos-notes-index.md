@@ -413,12 +413,8 @@ xcrun simctl delete unavailable
 <a name='Установка-brew'></a>
 #### Установка brew
 
-Для того, чтобы установить brew вам необходимо сначала установить 
-`Инструменты разработчика xcode`. После того как это сделано, можно приступить 
-к установке самого brew, он ставится 1 просто командой:
-
 ```bash
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
 Полезные ссылки:
@@ -526,7 +522,7 @@ brew tap <REPO>
 
 Список полезных реппозиториев:
 
-- caskroom/cask
+- homebrew/cask
 
 
 <a name='Кэш-brew'></a>
