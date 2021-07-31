@@ -70,7 +70,7 @@ https://tortoisegit.org/download/ - удобных графический инт
 Настройки для git которые нужные выполнить после установки git и на linux и 
 windows.
 
-- `git config --global user.name "A.Petrunnik"` - задаем имя пользователя
+- `git config --global user.name "Aleksey Petrunnik"` - задаем имя пользователя
 - `git config --global user.email my_mail@mail.ru` - задаем email пользователя
 - `git config --global core.editor nano` - задаём редактор по умолчанию
 - `git config --list` - выводит список установленных настроек
@@ -90,6 +90,8 @@ git config --global core.safecrlf true
 
 <a name='Автодополнение-в-MacOS'></a>
 #### Автодополнение в MacOS
+
+**bash**
 
 По умолчанию в терминале MacOS для git отключено автодоплнение. Исправить это
 можно следующим образом:
@@ -117,6 +119,42 @@ git config --global core.safecrlf true
 Теперь если открыть новое окно терминала, то там будет доступно автодополнение 
 при вводе команд для git. 
 
+**zsh**
+
+- устанавливаем bash-completion
+
+    ```
+    brew install bash-completion
+    ```
+
+- скачиваем необходимые скрипты
+
+    ```
+    mkdir -p ~/.zsh && cd ~/.zsh
+    
+    curl -o git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+    curl -o _git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
+    ```
+
+- включаем использование скриптов. Для этого открываем файл `~/.zshrc` и вставляем туда
+
+    ```
+    # Load Git completion
+    zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
+    fpath=(~/.zsh $fpath)
+    
+    autoload -Uz compinit && compinit
+    ```
+
+- очищаем cache
+    
+    ```
+    rm ~/.zcompdump
+    ```
+
+Полезные ссылки:
+
+- [Adding Git Completion to Zsh](https://oliverspryn.medium.com/adding-git-completion-to-zsh-60f3b0e7ffbc)
 
 
 <a name='Решение-проблем'></a>
