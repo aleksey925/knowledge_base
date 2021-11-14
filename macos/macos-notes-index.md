@@ -413,12 +413,100 @@ xcrun simctl delete unavailable
 <a name='Установка-brew'></a>
 #### Установка brew
 
+**Установка на mac с intel**
+
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
 Полезные ссылки:
 - http://dghubble.com/blog/posts/homebrew-os-x-package-management/
+
+
+**Установка на mac с apple silicon**
+
+Работа на mac с apple silicon имеет свои особенности. Это связано с тем, что пока не все программы имеют нативные 
+версии. По этому ниже будет описано как установить и использовать brew на устройствах с чипом от apple.
+
+Установка и настройка системы:
+
+1. Для начала, необходимо установить 2 версии brew, одна позволит нам устанавливать программы, которые будут работать 
+   через эмулятор, а вторая будет устанавливать нативные приложения.
+
+    ```
+    arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    arch -arm64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    ```
+
+    После установки brew для m1 будет установлен в `/opt/homebrew/bin/brew`, а для intel `/usr/local/bin/brew`.
+
+2. После установки очень важно правильно настроить инициализацию окружения. Для этого открываем файл `~/.zshrc` и 
+    добавляем в него следующие строки:
+
+    ```bash
+    # brew
+    if [[ $(arch) == 'arm64' ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    else
+        eval "$(/usr/local/bin/brew shellenv)"
+    fi
+     
+    # Генерирует флаги необходимые для сборки из исходников сишных библиотек
+    export LDFLAGS=""
+    export CPPFLAGS=""
+    export PKG_CONFIG_PATH=""
+     
+    pkgs=(openssl@1.1 curl readline zlib sqlite)
+    for pkg in $pkgs; do
+        pkg_dir="$HOMEBREW_PREFIX/opt/$pkg"
+     
+        lib_dir="$pkg_dir/lib"
+     
+        if [ -d "$lib_dir" ]; then
+            export LDFLAGS="$LDFLAGS -L$lib_dir"
+        fi
+     
+        include_dir="$pkg_dir/include"
+        if [ -d "$include_dir" ]; then
+            export CPPFLAGS="$CPPFLAGS -I$include_dir"
+        fi
+     
+        pkg_config_dir="$lib_dir/pkgconfig"
+        if [ -d "$pkg_config_dir" ]; then
+            if [ "x$PKG_CONFIG_PATH" = "x" ]; then
+                export PKG_CONFIG_PATH="$pkg_config_dir"
+            else
+                export PKG_CONFIG_PATH="PKG_CONFIG_PATH:$pkg_config_dir"
+            fi
+        fi
+    done
+    ```
+   
+    Данная конфигурация описывает логику выбора версии brew и создает переменные окружения необходимые для сборки из 
+    исходников приложений, которые зависят от софта устанавливаемого через brew.
+
+    В переменной pkgs описаны пакеты, которые являются зависимостями необходимыми для сборки других приложений из 
+    исходников. В данный момент там перечисленны некоторые из очень популярных библиотек, если для сборки нужной вам 
+    библиотеки нужные другие пакеты, которые вы уже установили, просто добавьте их туда.
+
+3. Теперь закройте и откройте новое окно терминала. Это необходимо для загрузки ранее описанной конфигурации.
+
+Теперь, когда система настроена. Для установки нативных приложений вам всегда необходимо открывать терминал для 
+архитектуры arm64, а для установки старых приложений терминал нужно открывать для архитектуры x86_64. Сделать это можно 
+так:
+
+```bash
+# Открывает терминал позволяющий работать с нативными приложениями
+arch -arm64 zsh
+
+# Открывает терминал позволяющий работать с приложениями в режиме эмуляции
+arch -x86_64 zsh
+```
+
+> Необходимо обратить внимание, что нужно делать именно так. Если вы будете пробовать выполнять команды вида 
+> `arch -x86_64 brew install python`, то возможно возникновение проблем, так как вы работаете в уже настроенном для 
+> другой архитектуры окружении.
+
 
 <a name='Установка-пакетов-brew'></a>
 #### Установка пакетов brew
