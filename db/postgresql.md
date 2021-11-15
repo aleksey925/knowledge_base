@@ -136,7 +136,7 @@ CREATE UNIQUE INDEX index_name ON table_name (column_name);
 CONCURRENTLY. Естественно в этом случае создание индекса займет больше времени, плюс просядет производительность.
 
 ```sql
-CREATE CONCURRENTLY INDEX index_name ON table_name (column_name);
+CREATE INDEX CONCURRENTLY index_name ON table_name (column_name);
 ```
 
 Есть пара моментов, о которых стоит помнить:
