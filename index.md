@@ -13,7 +13,8 @@
 2. Вспомогательные инструменты
     - [git](git/git-notes-index.md)
     - [docker](docker/docker-notes-index.md)
-    - [web-servers](web-servers/web servers-notes-index.md)
+    - [web-servers](web-servers/web-servers-notes-index.md)
+    - [message-brokers](message-broker/message-broker-index.md)
 3. [DevOps](devops/devops-notes-index.md)
 4. Базы данных
     - [Теория баз данных](db/database-theory-index.md)
