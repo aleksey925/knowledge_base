@@ -16,6 +16,7 @@
     - [Отключение SIP](#Отключение-SIP)
     - [Отключение Spotlight](#Отключение-Spotlight)
     - [Отключение уведомления "default interactive shell is now zsh"](#Отключение-уведомления-default-interactive-shell-is-now-zsh)
+    - [Настройка автодополнения команд в zsh](#Настройка-автодополнения-команд-в-zsh)
     - [Удаление мусора](#Удаление-мусора)
     
 2. <h3>[Установка/удаление программ](#Установка/удаление-программ)</h3>
@@ -368,7 +369,7 @@ sudo mdutil -a -i on
 <a name='Отключение-уведомления-default-interactive-shell-is-now-zsh'></a>
 ### Отключение уведомления "default interactive shell is now zsh"
 
-После обновления на macos calatina при открытии терминала всегда появляется 
+После обновления на macos catalina при открытии терминала всегда появляется 
 надоедливое сообщение:
 
 >The default interactive shell is now zsh. To update your account to use zsh, 
@@ -376,6 +377,45 @@ sudo mdutil -a -i on
 
 К счатью его можно легко отключить. Для этого необходимо добавить в файл
 `~/.bash_profile` строку `export BASH_SILENCE_DEPRECATION_WARNING=1`.
+
+
+<a name='Настройка-автодополнения-команд-в-zsh'></a>
+### Настройка автодополнения команд в zsh
+
+В данном примере будет показно, как включить автодополнение для: git, poetry, docker и docker-compose.
+
+1. Устанавливаем bash-completion `brew install bash-completion`
+2. Создаем папку для хранения файлов необходимых для автодополнения.
+
+    > Если у вас в окружении не определена переменная окружения HOMEBREW_PREFIX, то вам нужно инициализировать 
+    > окружение при помощи вызова `brew shellenv`.
+
+    ```
+    mkdir -p ~/.zsh && cd ~/.zsh
+   
+    poetry completions zsh > ~/.zsh/_poetry
+   
+    curl -o git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+    curl -o _git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
+   
+    cp $HOMEBREW_PREFIX/share/zsh/site-functions/_docker ~/.zsh/_docker
+    cp $HOMEBREW_PREFIX/share/zsh/site-functions/_docker_compose ~/.zsh/_docker_compose
+    ```
+
+3. Активируем загрузку автодополнений. Для этого открываем `~/.zshrc` и добавляем туда
+
+    ```
+    # Enable console autocompletion
+    zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
+    fpath=(~/.zsh $fpath)
+    autoload -Uz compinit && compinit
+    ```
+
+4. Перезагружаем консоль и наслаждаемся.
+
+P.S. Если вы хотите включить автодополнение еще для какой-то утилиты и вы эту утилиту устанавливали через brew, то
+первым делом попробуйте поискать файл нужный для включения автодополнения в папке 
+`$HOMEBREW_PREFIX/share/zsh/site-functions/`.
 
 
 <a name='Удаление-мусора'></a>
