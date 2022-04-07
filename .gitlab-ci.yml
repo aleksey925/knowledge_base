@@ -1,14 +1,14 @@
 image: registry.hub.docker.com/alex925/knowledge-base-generator:latest
 
 stages:
-  - build_and_delpoy_job
+  - update
 
 variables:
   MODE: "prod"
 
-build_and_delpoy_job:
+update-knowledge-base:
+  stage: update
+  script: cd $BASE_DIR && sh ./tools/build_on_ci_and_public.sh
   only:
     - master
     - develop
-  stage: build_and_delpoy_job
-  script: cd $BASE_DIR && sh ./tools/build_on_ci_and_public.sh
