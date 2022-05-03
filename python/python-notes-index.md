@@ -117,7 +117,6 @@ Python
 10. <h3>[Deploy](#Deploy)</h3>
     
     - [Публикация библиотеки в PyPi](#Публикация-библиотеки-в-PyPi)
-    - [Настройка nginx-unit и nginx](#Настройка-nginx-unit-и-nginx)
 
 11. <h3>[Тестирование](#Тестирование)</h3>
     
@@ -2648,24 +2647,6 @@ poetry, то и не понадобится устанавливать ника�
     Загруженную библиотеку можно найти [здесь](https://pypi.org/manage/projects/).
 
 
-<a name='Настройка-nginx-unit-и-nginx'></a>
-### Настройка nginx-unit и nginx
-
-Полезные материалы:
-
-- [NGINX Conf 2018: Configuring NGINX Unit for Production Applications – Serving a Django Project](https://www.nginx.com/blog/configuring-nginx-unit-for-production-applications-serving-django-project/)
-- [Запускаем Laravel с помощью Nginx Unit в Docker](https://uncaughtexception.ru/2017/10/16/zapuskaem-laravel-s-pomoschyu-nginx-unit-v-docker.html)
-- [NGINX UNIT - Записки сисадмина](https://sysadmin.pm/nginx-unit/)
-- [nginx-unit-example - GitHub](https://github.com/timtegeler/nginx-unit-example)
-- [Nginx Unit - Веб. Мысли в слух](https://miholeus.com/python/nginx-unit.html)
-- [Обслуживание приложений flask с помощью uwsgi и nginx в ubuntu 16.04](https://www.8host.com/blog/obsluzhivanie-prilozhenij-flask-s-pomoshhyu-uwsgi-i-nginx-v-ubuntu-16-04/)
-- [Разворачиваем python проект с docker на примере django + nginx + gunicorn + postgresql](https://www.haikson.com/programmirovanie/python/django-nginx-gunicorn-postgresql-docker/)
-- [Развертывание приложения python wsgi с помощью uwsgi+nginx](http://www.8host.com/blog/razvertyvanie-prilozheniya-python-wsgi-s-pomoshhyu-uwsginginx/)
-- [Настройка веб-сервера для Django с nginx и uWSGI](http://itman.in/django-webserver-nginx-uwsgi/)
-- [Очень простой способ заставить работать django на сервере](http://itman.in/stavim-django-na-server/)
-- [Зачем используют Nginx + другой сервер (Apache, Phusion Passanger, etc.)? - Toster](https://toster.ru/q/337352)
-- [Why does nginx starts process as root? - StackExchange](https://unix.stackexchange.com/questions/134301/why-does-nginx-starts-process-as-root)
-
 
 <a name='Тестирование'></a>
 ## Тестирование
@@ -2679,11 +2660,16 @@ poetry, то и не понадобится устанавливать ника�
 <a name='Mock'></a>
 ### Mock
 
+Работа с моками не всегда тривиальна и иногда нужна шпаргалка, которая поможет вспомнить как реализовать тот или иной 
+распространенный кейс. Для этого, я создал простой проект, в котором на примитивных примерах показываю как использовать
+ту или иную функциональность моков. Вы можете ознакомиться с ним по [ссылке](https://gitlab.com/alex925/mock-example).
+
 Полезные ссылки:
 
 - [Модуль Mock: макеты-пустышки в тестировании - habr](https://habr.com/ru/post/141209/)
 - [Mock a class and a class method in python unit tests - stackoverflow](https://stackoverflow.com/questions/33585431/mock-a-class-and-a-class-method-in-python-unit-tests)
 - [Unit-тесты, пытаемся писать правильно, чтобы потом не было мучительно больно - habr](https://habr.com/ru/post/116372/)
+
 
 
 <a name='Разное'></a>
@@ -2695,7 +2681,7 @@ poetry, то и не понадобится устанавливать ника�
 Стандартная библиотека имеет не до конца продуманное API работы с датой и 
 временем, именно по этому была создана библиотека
 [arrow](https://arrow.readthedocs.io/en/latest/). Она представляет из себя 
-замену стандратного модуля datetime. 
+замену стандартного модуля datetime. 
 
 Если в вашем приложении необходимо много 
 работать с датой и временем, то рекомендуется использовать именно эту 
