@@ -19,19 +19,20 @@ pip3 install alembic==1.0.10
 
 ### Настройка проекта
 
-После установки alembic, необходимо произвести инициализацию проекта, для того,
-чтобы alembic создал в проекте все необходимые файлы.
+Инициализируем alembic в проекте:
 
 ```bash
-alembic init --template generic alembic
+alembic init --template generic migrations
 ```
 
-После инициализации проекта, необходимо немного подправить сгенерированный 
-скрипт env.py. Для того, чтобы научить alembic брать url БД не из 
-`alembic.ini`, а из глобального для всего проекта конфига (который обычно во 
-всех flask проектах представляет из себя python модуль), а так же включить 
-поддержку автогенерации миграций и т д. Для этого открываем скрипт 
-`alembic/env.py` и:
+В создавшемся файле `alembic.ini` раскомментируем строку `file_template`, чтобы alembic 
+генерировал понятные имена для создаваемых миграций.
+
+Теперь, после базовой настройки, необходимо немного подправить сгенерированный 
+скрипт env.py. Это нужно, чтобы научить alembic брать dsn БД не из `alembic.ini`, 
+а из глобального для всего проекта конфига (который обычно является обычным python 
+модулем), а так же включить поддержку автогенерации миграций и т д. Для этого 
+открываем скрипт `migrations/env.py` и:
 
 - заменяем все импорты на следующие
 
@@ -46,8 +47,8 @@ alembic init --template generic alembic
     
     # fix ModuleNotFoundError exception
     sys.path.insert(0, str(Path(__file__).parent.parent.absolute()))
-    import config as app_conf
-    from models import Base
+    from config import Config  # noqa: E402
+    from models import Base  # noqa: E402
     ```
 
 - находим строку `fileConfig(config.config_file_name)` и заменяем ее на
@@ -66,7 +67,7 @@ alembic init --template generic alembic
 - добавляем в конфиг alembic URL нашей БД 
 
     ```python
-    config.set_main_option('sqlalchemy.url', app_conf.SQLALCHEMY_DATABASE_URI)
+    config.set_main_option('sqlalchemy.url', Config.SQLALCHEMY_DATABASE_URI)
     ```
   
 - модифицируем функцию run_migrations_online
@@ -95,7 +96,7 @@ alembic init --template generic alembic
                 context.run_migrations()
     ```
     
-### Автоматическая генерация миграциий
+### Автоматическая генерация миграций
 
 После настройки можно сгенерировать нашу первую миграцию, которая зафиксирует
 начальное состояние базы. Скрипт с миграцией будет создан в папке 
