@@ -259,7 +259,7 @@ intel, но не с небольшими доработками.
 4. Устанавливаем полезные утилиты необходимые для работы
 
     ```
-    brew install wget direnv bash-completion mc pyenv
+    brew install wget direnv bash-completion mc pyenv xz
     ```
 
 5. Устанавливаем docker
