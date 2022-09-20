@@ -198,7 +198,7 @@ alembic stamp head
 
 Ссылки на дополнительные материалы:
 
-- [Проект с примерами кода](https://bitbucket.org/alex925/alembic-example/src/master/)
+- [Проект с примерами кода](https://gitlab.com/alex925/alembic-example)
 - [alembic – Python migrations quick start](https://michaelheap.com/alembic-python-migrations-quick-start/)
 - [Schema migrations with Alembic, Python and PostgreSQL](https://www.compose.com/articles/schema-migrations-with-alembic-python-and-postgresql/)
 
