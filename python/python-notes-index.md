@@ -203,6 +203,8 @@ intel, но не с небольшими доработками.
     export PATH="$HOME/.poetry/bin:$PATH"
      
     # Pyenv
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
     eval "$(pyenv init --path)"
      
     # direnv
@@ -259,7 +261,8 @@ intel, но не с небольшими доработками.
 4. Устанавливаем полезные утилиты необходимые для работы
 
     ```
-    brew install wget direnv bash-completion mc pyenv xz
+    brew install wget direnv bash-completion mc xz
+    curl https://pyenv.run | bash
     ```
 
 5. Устанавливаем docker
@@ -290,7 +293,7 @@ intel, но не с небольшими доработками.
 8. Устанавливаем через pyenv нужную версию python
 
     ```
-    pyenv install 3.9.3
+    pyenv install 3.10.8
     ```
 
 
