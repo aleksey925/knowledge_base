@@ -146,7 +146,7 @@ py
 ``` 
 Будет запущен интерпретатор выбранный по умолчанию.
 
-Скрипту можно указать, какую кокнретно версию нужно запустить:
+Скрипту можно указать, какую конкретную версию нужно запустить:
 ```cmd
 py -2.7
 ```
@@ -159,7 +159,7 @@ py -3
 
 1. Заходим на оф. сайт и качаем python версии «embeddable zip file»;
 2. Разархивируем скачанный файл;
-3. Удаляем из извлеченной папки файл с расширенем `_pth`;
+3. Удаляем из извлеченной папки файл с расширением `_pth`;
 4. Создаем папку `lib`, извлекаем туда содержимое файла `<версия_python>.zip` и 
 удаляем этот архив;
 5. Скачиваем скрипт [https://bootstrap.pypa.io/get-pip.py](https://bootstrap.pypa.io/get-pip.py) и запускаем его при 
@@ -200,7 +200,7 @@ intel, но не с небольшими доработками.
     fi
      
     # Poetry
-    export PATH="$HOME/.poetry/bin:$PATH"
+    export PATH="$HOME/.local/bin:$PATH"
      
     # Pyenv
     export PYENV_ROOT="$HOME/.pyenv"
@@ -261,7 +261,7 @@ intel, но не с небольшими доработками.
 4. Устанавливаем полезные утилиты необходимые для работы
 
     ```
-    brew install wget direnv bash-completion mc xz
+    brew install wget direnv bash-completion mc xz python@3.9
     curl https://pyenv.run | bash
     ```
 
@@ -274,8 +274,7 @@ intel, но не с небольшими доработками.
 6. Устанавливаем poetry
 
     ```
-    wget https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py
-    /usr/bin/python3 ./get-poetry.py
+    curl -sSL https://install.python-poetry.org | python3.9 -
     poetry config virtualenvs.create false
     ```
 
