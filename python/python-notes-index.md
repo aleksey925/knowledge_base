@@ -214,6 +214,8 @@ intel, но не с небольшими доработками.
     zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
     fpath=(~/.zsh $fpath)
     autoload -Uz compinit && compinit
+   
+    echo '[[ $commands[kubectl] ]] && source <(kubectl completion zsh)' >> ~/.zshrc
      
     # Генерирует флаги необходимые для сборки из исходников сишных библиотек
     export LDFLAGS=""
