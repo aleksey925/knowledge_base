@@ -1,20 +1,18 @@
 Tutorial alembic
 ================
 
-alembic - это легковесный инструмент для создания миграций базы данных при 
-использовании SQLAlchemy.
+alembic - это легковесный инструмент для создания и управления миграциями БД
 
 ## Добавление в проект миграций БД
 
-Данный туториал описывает процесс добавления в уже существующий проект скриптов
-миграции.
+Данный туториал описывает процесс добавления в уже существующий проект миграций для БД.
 
 ### Установка
 
 Первым делом необходимо установить библиотеку alembic
 
 ```bash
-pip3 install alembic==1.0.10
+pip3 install alembic==1.8.1
 ```
 
 ### Настройка проекта
@@ -29,26 +27,17 @@ alembic init --template generic migrations
 генерировал понятные имена для создаваемых миграций.
 
 Теперь, после базовой настройки, необходимо немного подправить сгенерированный 
-скрипт env.py. Это нужно, чтобы научить alembic брать dsn БД не из `alembic.ini`, 
-а из глобального для всего проекта конфига (который обычно является обычным python 
-модулем), а так же включить поддержку автогенерации миграций и т д. Для этого 
-открываем скрипт `migrations/env.py` и:
+скрипт env.py. Это нужно, чтобы научить alembic брать URI для подключения к БД 
+не из `alembic.ini`, а из глобального для всего проекта конфига (который обычно 
+является обычным python модулем), а так же включить поддержку автогенерации миграций 
+и т д. Для этого открываем скрипт `migrations/env.py` и:
 
-- заменяем все импорты на следующие
+- импортируем из конфига URI БД и базовый класс `Base` из которого мы сможем 
+получить объект MetaData
 
     ```python
-    import sys
-    from logging.config import fileConfig
-    from pathlib import Path
-    
-    from alembic import context
-    from sqlalchemy import engine_from_config
-    from sqlalchemy import pool
-    
-    # fix ModuleNotFoundError exception
-    sys.path.insert(0, str(Path(__file__).parent.parent.absolute()))
-    from config import Config  # noqa: E402
-    from models import Base  # noqa: E402
+    from config import SQLALCHEMY_DATABASE_URI
+    from models import Base
     ```
 
 - находим строку `fileConfig(config.config_file_name)` и заменяем ее на
@@ -58,49 +47,40 @@ alembic init --template generic migrations
    но если работа с миграциями будет осуществляться из кода приложения, 
    то дефотное поведение alembic может доставить много хлопот.
 
-- находим строку `target_metadata = None` и заменяем `None` на `Base.metadata`,
-в итоге получится:
+- находим строку `target_metadata = None` и заменяем на:
+
     ```python
     target_metadata = Base.metadata
     ```
 
-- добавляем в конфиг alembic URL нашей БД 
+- где-то после объявления `target_metadata` вставляем следующую строку
 
     ```python
-    config.set_main_option('sqlalchemy.url', Config.SQLALCHEMY_DATABASE_URI)
+    config.set_main_option('sqlalchemy.url', SQLALCHEMY_DATABASE_URI)
     ```
   
-- модифицируем функцию run_migrations_online
+    Это нужно, чтобы alembic знал, параметры подключения к БД с которой нужно 
+    будет работать.
+  
+- находим в функции `run_migrations_online` вызов `context.configure` и 
+    приводим его следующему виду:
+
     ```python
-    def run_migrations_online():
-        """Run migrations in 'online' mode.
-    
-        In this scenario we need to create an Engine
-        and associate a connection with the context.
-    
-        """
-        connectable = engine_from_config(
-            config.get_section(config.config_ini_section),
-            prefix="sqlalchemy.",
-            poolclass=pool.NullPool,
-        )
-    
-        with connectable.connect() as connection:
-            context.configure(
-                connection=connection,
-                target_metadata=target_metadata,
-                render_as_batch=connectable.url.drivername == 'sqlite'
-            )
-    
-            with context.begin_transaction():
-                context.run_migrations()
+    context.configure(
+        connection=connection,
+        target_metadata=target_metadata,
+        render_as_batch=connectable.url.drivername == 'sqlite',
+    )
     ```
-    
+
+Пример настроенного проекта вы сможете найти [тут](https://gitlab.com/alex925/alembic-example).
+
+
 ### Автоматическая генерация миграций
 
 После настройки можно сгенерировать нашу первую миграцию, которая зафиксирует
 начальное состояние базы. Скрипт с миграцией будет создан в папке 
-alembic/versions.
+migrations/versions.
 
 ```bash
 alembic revision --autogenerate -m "init"
@@ -115,7 +95,7 @@ alembic upgrade head
 ### Ограничения автоматической генерации миграций
 
 Автогенерация просто замечательна, но у нее есть некоторые ограничения, о 
-которых нужно занть. Пережде всего, если вы переименуете таблицу или столбец,
+которых нужно знать. Прежде всего, если вы переименуете таблицу или столбец,
 то alembic будет считать это удалением и созданием нового столбца/таблицы. Это 
 приведет к потере данных. По этому вы должны вручную произвести редактирование 
 автоматически сгенерированной миграции в которой был переименован 
@@ -127,12 +107,12 @@ alembic upgrade head
 в консоли команду
 
 ```bash
-alembic revision -m "add_field_create_date"  
+alembic revision -m "add_field_create_date"
 ```
 
-После ее выполнения, в папке `alembic/versions`, будет создан скрипт 
-`7c86752c4a38_add_field_create_date.py` с пустыми функциями upgrade и 
-downgrade, в которых нужно будет описать то, что необходимо сделать с БД.
+После ее выполнения, в папке `migrations/versions`, будет создан скрипт 
+`2019_06_09_2107-7c86752c4a38_add_field_create_date.py` с пустыми функциями 
+upgrade и downgrade, в которых нужно будет описать то, что необходимо сделать с БД.
 
 В результате должен получиться примерно такой код:
 
@@ -198,15 +178,14 @@ alembic stamp head
 
 Ссылки на дополнительные материалы:
 
-- [Проект с примерами кода](https://gitlab.com/alex925/alembic-example)
 - [alembic – Python migrations quick start](https://michaelheap.com/alembic-python-migrations-quick-start/)
 - [Schema migrations with Alembic, Python and PostgreSQL](https://www.compose.com/articles/schema-migrations-with-alembic-python-and-postgresql/)
 
 
 ### Применение миграций из кода приложения
 
-Для того, чтобы применить миграции из кода приложения можно воспользоваться
-следующим кодом
+Применить миграции из кода приложения можно при помощи следующего кода
+
 ```python
 import logging
 import os
@@ -265,16 +244,16 @@ def apply_migrations(root_dir):
 
 ### Команда для автоматической генерации миграции создает пустой скрипт
 
-Если вы сталкнулись с тем, что автоматическая генерация миграций не срабытвает,
+Если вы столкнулись с тем, что автоматическая генерация миграций не срабатывает,
 значит вам необходимо проверить, что при импорте базового класса (`Base`) 
 происходит импорт всех моделей приложения. 
 
 >Это очень важно, так как базовый класс моделей внутри себя пользуется 
->возможостями метапрограммирования по этому, если во время исполнения 
+>возможностями метапрограммирования по этому, если во время исполнения 
 >скрипта env.py модели не будут импортированы, то sqlalchemy ничего не будет о 
 >них знать и следовательно не сможет сгенерировать миграцию.
 
-Если вы поняли, что стокнулись именно с такой ситуацией, то один из путей 
+Если вы поняли, что столкнулись именно с такой ситуацией, то один из путей 
 решения проблемы, это:
 
 - вынести все модули с моделями в отдельный пакет
@@ -297,6 +276,7 @@ env.
 миграции.
 
 Полезные ссылки:
+
 - [Sqlite lack of ALTER support, Alembic migration failing because of this. Solutions?](https://stackoverflow.com/questions/30378233/sqlite-lack-of-alter-support-alembic-migration-failing-because-of-this-solutio)
 - [batch_alter_table - alembic](https://kite.com/python/docs/alembic.op.batch_alter_table)
 
