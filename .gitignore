@@ -69,6 +69,7 @@ Temporary Items
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 .idea
+.fleet
 
 # CMake
 cmake-build-debug/
