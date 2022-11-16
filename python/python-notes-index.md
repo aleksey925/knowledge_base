@@ -198,6 +198,7 @@ intel, но не с небольшими доработками.
     else
         eval "$(/usr/local/bin/brew shellenv)"
     fi
+    export HOMEBREW_NO_ANALYTICS=1
      
     # Poetry
     export PATH="$HOME/.local/bin:$PATH"
@@ -215,7 +216,7 @@ intel, но не с небольшими доработками.
     fpath=(~/.zsh $fpath)
     autoload -Uz compinit && compinit
    
-    echo '[[ $commands[kubectl] ]] && source <(kubectl completion zsh)' >> ~/.zshrc
+    source <(kubectl completion zsh)
      
     # Генерирует флаги необходимые для сборки из исходников сишных библиотек
     export LDFLAGS=""
@@ -293,8 +294,8 @@ intel, но не с небольшими доработками.
     poetry completions zsh > ~/.zsh/_poetry
     curl -o git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
     curl -o _git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
-    cp /opt/homebrew/share/zsh/site-functions/_docker ~/.zsh/_docker
-    cp /opt/homebrew/share/zsh/site-functions/_docker_compose ~/.zsh/_docker_compose
+    cp $HOMEBREW_PREFIX/share/zsh/site-functions/_docker ~/.zsh/_docker
+    cp $HOMEBREW_PREFIX/share/zsh/site-functions/_docker_compose ~/.zsh/_docker_compose
     ```
 
 8. Устанавливаем через pyenv нужную версию python
