@@ -95,11 +95,12 @@ Python
     - [В чем отличие конкурентности от многопоточности](#В-чем-отличие-конкурентности-от-многопоточности)
     - [Асинхронность в python](#Асинхронность-в-python)
 
-9. <h3>[Type hints](#Type-hints)</h3>
+9. <h3>[Аннотации типов](#Аннотации-типов)</h3>
 
     - [Введение](#Введение-в-type-hints)
     - [Generic type variables (TypeVar)](#Generic-type-variables-TypeVar)
     - [Определение generic классов](#Определение-generic-классов)
+    - [Аннотирование декораторов (ParamSpec, Concatenate)](#Аннотирование-декораторов-ParamSpec-Concatenate)
 
 10. <h3>[Оптимизация и профилирование](#Оптимизация-и-профилирование)</h3>
 
@@ -2348,8 +2349,8 @@ AsyncIO подойдет, если приложение большую част�
 
 
 
-<a name='Type-hints'></a>
-## Type hints
+<a name='Аннотации-типов'></a>
+## Аннотации типов
 
 <a name='Введение-в-type-hints'></a>
 ### Введение
@@ -2580,6 +2581,115 @@ family_age_reg.set_item("steve", "yeah")
 - [Using Generics in Python](https://medium.com/@steveYeah/using-generics-in-python-99010e5056eb)
 - [Defining generic classes - mypy](https://mypy.readthedocs.io/en/stable/generics.html#defining-generic-classes)
 
+
+<a name='Аннотирование-декораторов-ParamSpec-Concatenate'></a>
+### Аннотирование декораторов (ParamSpec, Concatenate)
+
+> Если вы используете python версии ниже 3.10, вы можете импортировать `ParamSpec`, 
+> `Concatenate` из модуля `typing_extensions`.
+
+При описании декораторов есть распространенный шаблон, когда декоратор без изменений
+передает в декорируемую функцию все полученные параметры. До [PEP-612](https://peps.python.org/pep-0612/)
+описать аннотации типов для данного декоратора было нельзя. По этому этот PEP добавляет
+ParamSpec переменные, которые решают эту проблему.
+
+Этот тип позволяет описать связь между аргументами передаваемыми в декоратор и аргументами
+с которыми вызывается декорируемая функция. Пример как это можно сделать описан ниже:
+
+```python
+import time
+from typing import ParamSpec, TypeVar, Callable
+
+T = TypeVar('T')
+P = ParamSpec('P')
+
+
+def timeit(func: Callable[P, T]) -> Callable[P, T]:
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+        start_time = time.perf_counter()
+        value = func(*args, **kwargs)
+        execution_time = time.perf_counter() - start_time
+        print(f'The "{func.__name__}" function took {execution_time} seconds')
+        return value
+
+    return wrapper
+
+
+@timeit
+def add_one(x: int) -> int:
+    return x + 1
+
+
+result = add_one(1)
+```
+
+Пример декоратора, который добавляет дополнительные данные к тем, что возвращает декорируемая функция:
+
+```python
+import time
+from typing import ParamSpec, TypeVar, Callable
+
+T = TypeVar('T')
+P = ParamSpec('P')
+
+
+def timeit() -> Callable[[Callable[P, T]], Callable[P, tuple[T, float]]]:
+    def decorator(func: Callable[P, T]) -> Callable[P, tuple[T, float]]:
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> tuple[T, float]:
+            start_time = time.perf_counter()
+            value = func(*args, **kwargs)
+            exec_time = time.perf_counter() - start_time
+            print(f'The "{func.__name__}" function took {exec_time} seconds')
+            return value, exec_time
+
+        return wrapper
+
+    return decorator
+
+
+@timeit()
+def add_one(x: int) -> int:
+    return x + 1
+
+
+result, execution_time = add_one(1)
+```
+
+Другой распространенный кейс использования декораторов, когда декоратор добавляет или
+удаляет какой-то аргумент. С PEP-612 это делается вот так:
+
+```python
+from typing import ParamSpec, TypeVar, Callable, Concatenate
+
+T = TypeVar('T')
+P = ParamSpec('P')
+
+
+def get_request_id() -> str:
+    return '1'  # Эмулирует получение откуда-то идентификатора запроса
+
+
+def with_request_id(func: Callable[Concatenate[str, P], T]) -> Callable[P, T]:
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+        return func(get_request_id(), *args, **kwargs)
+
+    return wrapper
+
+
+@with_request_id
+def handler(request_id: str) -> str:
+    return f'we are processing your request #{request_id}'
+
+
+result = handler()
+```
+
+Полезные ссылки:
+
+- [PEP-612](https://peps.python.org/pep-0612/)
+- [Declaring decorators - mypy](https://mypy.readthedocs.io/en/stable/generics.html?highlight=ParamSpec#declaring-decorators)
+- [Static typing Python decorators - Redowan's Reflections](https://rednafi.github.io/reflections/static-typing-python-decorators.html)
+- [Can ParamSpec be used to type individual arguments? - stackoverflow](https://stackoverflow.com/questions/73129698/can-paramspec-be-used-to-type-individual-arguments)
 
 
 <a name='Оптимизация-и-профилирование'></a>
