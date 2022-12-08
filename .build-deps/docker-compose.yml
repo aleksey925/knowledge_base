@@ -1,0 +1,27 @@
+x-base: &base
+  image: ghcr.io/aleksey925/markdown-docs-compiler:latest
+  env_file:
+    - .env
+  volumes:
+    - ../.build-deps:/opt/build-deps
+    - ../:/opt/source
+    - ./output:/opt/output
+
+services:
+  debug-build:
+    <<: *base
+    command: "compile \
+                  --source-dir=/opt/source \
+                  --output-dir=/opt/output \
+                  --template-dir=/opt/build-deps/templates \
+                  --static-dir=/opt/build-deps/static \
+                  --site-root-prefix=/Users/alekseipetrunnik/PycharmProjects/knowledge-base/.build-deps/output"
+
+  build:
+    <<: *base
+    command: "compile \
+                  --source-dir=/opt/source \
+                  --output-dir=/opt/output \
+                  --template-dir=/opt/build-deps/templates \
+                  --static-dir=/opt/build-deps/static \
+                  --site-root-prefix=https://aleksey925.github.io/knowledge-base/"

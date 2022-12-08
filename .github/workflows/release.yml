@@ -1,0 +1,42 @@
+name: release
+
+on:
+  push:
+    branches:
+      - 'source'
+
+env:
+  RELEASE_BRANCH: "html"
+  RELEASE_REPO: "https://${{ secrets.USER }}:${{ secrets.GITHUB_TOKEN }}@github.com/aleksey925/knowledge-base.git"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/aleksey925/markdown-docs-compiler:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install git
+        run: apt update && apt install -y git
+      - name: Compile
+        env:
+          SOURCE_IGNORE: '[".idea",".git",".github",".gitignore",".build-deps"]'
+        run: |
+          markdown-docs-compiler compile \
+                                 --source-dir=./ \
+                                 --output-dir=../output \
+                                 --template-dir=./.build-deps/templates \
+                                 --static-dir=./.build-deps/static \
+                                 --site-root-prefix=https://aleksey925.github.io/knowledge-base/
+      - name: Push result
+        run: |
+            cd ../output \
+            && git init \
+            && git config --local user.name "ci user" \
+            && git config --local user.email "ci@ci.com" \
+            && git add . \
+            && git commit -m 'init' \
+            && git remote add origin $RELEASE_REPO \
+            && git branch -m $RELEASE_BRANCH \
+            && git push -u origin $RELEASE_BRANCH -f
