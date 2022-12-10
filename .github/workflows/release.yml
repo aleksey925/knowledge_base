@@ -22,6 +22,7 @@ jobs:
       - name: Compile
         env:
           SOURCE_IGNORE: '[".idea",".git",".github",".gitignore",".build-deps"]'
+          CONTENT_DIR_NAME: "knowledge_base"
         run: |
           markdown-docs-compiler compile \
                                  --source-dir=./ \

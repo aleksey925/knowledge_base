@@ -2,6 +2,8 @@ x-base: &base
   image: ghcr.io/aleksey925/markdown-docs-compiler:latest
   env_file:
     - .env
+  environment:
+    - CONTENT_DIR_NAME=knowledge_base
   volumes:
     - ../.build-deps:/opt/build-deps
     - ../:/opt/source
