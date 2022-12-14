@@ -2505,6 +2505,7 @@ if __name__ == "__main__":
 - [`TypeVar`s explained](https://dev.to/decorator_factory/typevars-explained-hmo) - первоисточник
 - [Using Generics in Python](https://medium.com/@steveYeah/using-generics-in-python-99010e5056eb)
 - [Generic functions - mypy](https://mypy.readthedocs.io/en/stable/generics.html#generic-functions)
+- [Type Parameter Naming Conventions - stackoverflow](https://stackoverflow.com/questions/2900881/generic-type-parameter-naming-convention-for-java-with-multiple-chars/2900933#2900933)
 
 
 <a name='Определение-generic-классов'></a>
