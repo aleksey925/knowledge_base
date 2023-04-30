@@ -251,7 +251,7 @@ ln -s $(go env GOROOT) ~/go1.4
 <a name='Создание-shared-library'></a>
 ### Создание shared library
 
-Начиная с go 1.5.1 можно на go создавать библиотеки, для других языках 
+Начиная с go 1.5.1 можно на go создавать библиотеки, для других языков 
 программирования.
 
 ```go
@@ -267,13 +267,13 @@ func add(left, right int) int {
 func main() {}
 ```
 
-Перед функциями, которые можно импортировать нужно объявлять комментарий
+Перед функциями, которые можно импортировать нужно вставлять комментарий
 `export <имя функции>`.
 
 Компиляция должна выполняться с помощью команды:
 
 ```bash
-go build -buildmode=c-shared -o ./out.so .inp.go
+go build -buildmode=c-shared -o ./lib.so .lib.go
 ```
 
 После этого скомпилированную библиотеку можно использовать в python следующим 
@@ -282,10 +282,79 @@ go build -buildmode=c-shared -o ./out.so .inp.go
 ```python
 from ctypes import cdll
 
-lib = cdll.LoadLibrary('./out.so')
+lib = cdll.LoadLibrary('./lib.so')
 result = lib.add(2, 3)
 print(result)
 ```
+
+В примере выше был показан простой случай, когда функция в shared library 
+принимает на вход число и возвращает число. В случае, когда хочется работать 
+со строками, код будет немного сложнее.
+
+```go
+package main
+
+// #include <stdlib.h>
+import "C"
+import (
+    "fmt"
+    "strings"
+    "unsafe"
+)
+
+//export JoinStr
+func JoinStr(sep string, str1 string, str2 string) *C.char {
+    result := strings.Join([]string{str1, str2}, sep)
+    fmt.Println("print from go", result)
+    return C.CString(result)
+}
+
+//export FreePointer
+func FreePointer(pointer *C.char) {
+    C.free(unsafe.Pointer(pointer))
+}
+
+func main() {}
+```
+
+```python
+import ctypes
+
+
+class GoStr(ctypes.Structure):
+    _fields_ = [("p", ctypes.c_char_p), ("n", ctypes.c_int64)]
+
+    @classmethod
+    def from_param(cls, value):
+        """
+        Converts a python string to a GoStr
+        """
+        value = value.encode()
+        return cls(value, len(value))
+
+    def __str__(self):
+        return ctypes.string_at(self.p, self.n).decode()
+
+
+library = ctypes.CDLL('./lib.so')
+join_str = library.JoinStr
+join_str.argtypes = [GoStr, GoStr, GoStr]
+join_str.restype = ctypes.POINTER(ctypes.c_char)
+free_pointer = library.FreePointer
+free_pointer.argtypes = [ctypes.POINTER(ctypes.c_char)]
+
+for i in range(1, 30):
+    result_pointer = join_str('-', 'str', str(i))
+    print(ctypes.c_char_p.from_buffer(result_pointer).value)
+    free_pointer(result_pointer)
+```
+
+В python коде, обратите внимание на строку `join_str.restype = ctypes.POINTER(ctypes.c_char)`.
+В ней указывается, что функция `join_str` будет возвращать указатель на строку, а не просто 
+строку. Если мы укажем, что ожидаем просто `ctypes.c_char`, то у нас будет течь в приложении 
+память, так как python будет получать указатель, брать из него данные и отбасывать укатель.
+В итоге память на которую узказывает указатель не будет ни когда освобождена.
+
 
 Полезные ссылки:
 
@@ -298,6 +367,7 @@ print(result)
 - [Creating shared libraries in Go](http://snowsyn.net/2016/09/11/creating-shared-libraries-in-go/)
 - [ctypes return a string from c function](https://stackoverflow.com/questions/14883853/ctypes-return-a-string-from-c-function)
 - [Вызов функций Go из других языков](https://habr.com/ru/company/mailru/blog/324250/)
+- [Go: How to deal with Memory leaks while returning a CString? - stackoverflow](https://stackoverflow.com/questions/74990578/go-how-to-deal-with-memory-leaks-while-returning-a-cstring)
 
 
 
