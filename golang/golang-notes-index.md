@@ -196,8 +196,6 @@ sudo GOOS=windows GOARCH=amd64 CGO_ENABLED=0 ./make.bash —no-clean
 Go, и всю стандартную библиотеку, только в этот раз — для платформы 
 windows/amd64.
 
-Также, по упомянутой выше причине, мы отключили поддержку CGO.
-
 **Значения GOOS и GOARCH**
 
 OS            |     $GOOS
@@ -369,6 +367,8 @@ for i in range(1, 30):
 - [ctypes return a string from c function](https://stackoverflow.com/questions/14883853/ctypes-return-a-string-from-c-function)
 - [Вызов функций Go из других языков](https://habr.com/ru/company/mailru/blog/324250/)
 - [Go: How to deal with Memory leaks while returning a CString? - stackoverflow](https://stackoverflow.com/questions/74990578/go-how-to-deal-with-memory-leaks-while-returning-a-cstring)
+- [Pass arrays to shared libraries from python using C types - github gist](https://gist.github.com/lmammino/10ae9ad290809f172e6eb3b6957bd18c)
+- [Return array in Python from shared library built in Go](https://stackoverflow.com/questions/61898877/return-array-in-python-from-shared-library-built-in-go)
 
 
 
