@@ -27,6 +27,7 @@
     
     - [Применение DRY к docker-compose.yml](#Применение-DRY-к-docker-compose.yml)
     - [Работа с секретами](#Работа-с-секретами)
+    - [Смена пользователя](#Смена-пользователя)
   
 
 <a name='Введение'></a>
@@ -162,6 +163,14 @@ docker compose
 на хостовый компьютер. Предполагая худшее, мы должны обеспечить запуск 
 процессов внутри контейнера от пользователя, который не имеет никаких прав 
 на хостовой машине.
+
+Есть несколько способов решить эту проблему:
+
+1. Создать пользователя при создании docker образа и переключиться на него
+2. При создании образа прописать от имени какого пользователя должен осуществляться 
+запуск  и т д.
+
+Ниже будет описано как это сделать на уровне создания docker образа.
 
 Для того, чтобы создать пользователя в дистрибутиве alpine необходимо выполнить:
 
@@ -785,4 +794,36 @@ Dockerfile (docker-compose не умеет с этим работать).
 - [Build secrets and SSH forwarding in Docker 18.09 - medium](https://medium.com/@tonistiigi/build-secrets-and-ssh-forwarding-in-docker-18-09-ae8161d066)
 - [Build Enhancements for Docker - docs.docker](https://docs.docker.com/develop/develop-images/build_enhancements/)
 - [Support for docker build --secret for build-time docker secrets. #6358](https://github.com/docker/compose/issues/6358)
+
+
+<a name='Смена-пользователя'></a>
+### Смена пользователя
+
+Пример запуска приложения в контейнере с файловой системой доступной только на 
+запись, из под не привелегированного пользователя, с маппингом частей файловой 
+системы в ОЗУ, чтобы разрешить запись в них.
+
+```docker-compose
+app:
+  image: some-app
+  build:
+      context: .
+      dockerfile: Dockerfile
+  env_file:
+    - .env
+  volumes:
+    - "./src/:/opt/app/src/"
+    - "./entrypoint.sh:/opt/app/entrypoint.sh"
+  user: "1000:1000"
+  read_only: true
+  tmpfs:
+    - /opt/app/temp:uid=1000,gid=1000
+    - /tmp/:uid=1000,gid=1000
+    - /.config:uid=1000,gid=1000
+```
+
+Полезные ссылки:
+
+- [How to set user and group in Docker Compose](https://blog.giovannidemizio.eu/2021/05/24/how-to-set-user-and-group-in-docker-compose/)
+- [Docker-compose: Mounting a tmpfs usable by non-root user](https://stackoverflow.com/questions/53498380/docker-compose-mounting-a-tmpfs-usable-by-non-root-user)
 
