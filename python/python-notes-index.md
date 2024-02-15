@@ -208,7 +208,8 @@ intel, но не с небольшими доработками.
     export HOMEBREW_NO_ANALYTICS=1
      
     # Poetry
-    export PATH="$HOME/.local/bin:$PATH"
+    export PATH="$HOME/.poetryenv/1.7.1:$PATH"
+    poetry completions zsh > ~/.zsh/_poetry
      
     # Pyenv
     export PYENV_ROOT="$HOME/.pyenv"
@@ -271,14 +272,9 @@ intel, но не с небольшими доработками.
 4. Устанавливаем полезные утилиты необходимые для работы
 
     ```
-    brew install wget direnv bash-completion mc xz python@3.9
+    brew install wget direnv bash-completion mc xz
     curl https://pyenv.run | bash
-    ```
-
-    Устанавливаем удобный терминал
-
-    ```
-    brew install iterm2
+    curl -sSL https://raw.githubusercontent.com/aleksey925/poetryenv/master/src/poetryenv.sh -o ~/poetryenv && bash ~/poetryenv self-install
     ```
 
 5. Устанавливаем docker
@@ -290,7 +286,7 @@ intel, но не с небольшими доработками.
 6. Устанавливаем poetry
 
     ```
-    curl -sSL https://install.python-poetry.org | python3.9 -
+    poetryenv install --python 3.12.1 --poetry 1.7.1
     poetry config virtualenvs.create false
     ```
 
@@ -298,17 +294,16 @@ intel, но не с небольшими доработками.
 
     ```
     mkdir -p ~/.zsh && cd ~/.zsh
-    poetry completions zsh > ~/.zsh/_poetry
     curl -o git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
     curl -o _git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
-    cp $HOMEBREW_PREFIX/share/zsh/site-functions/_docker ~/.zsh/_docker
-    cp $HOMEBREW_PREFIX/share/zsh/site-functions/_docker_compose ~/.zsh/_docker_compose
+    ln -s /Applications/Docker.app/Contents/Resources/etc/docker.zsh-completion ~/.zsh/_docker
+    ln -s /Applications/Docker.app/Contents/Resources/etc/docker-compose.zsh-completion ~/.zsh/_docker_compose
     ```
 
 8. Устанавливаем через pyenv нужную версию python
 
     ```
-    pyenv install 3.10.8
+    pyenv install 3.12.1
     ```
 
 
