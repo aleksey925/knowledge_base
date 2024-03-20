@@ -3065,6 +3065,7 @@ __path__ = extend_path(__path__, __name__)
 ```
 
 Заметка основана на:
+
 - [Объединение нескольких пакетов в одно пространство имен Python - habr](https://habr.com/ru/articles/458432/)
 - [PEP 420 – Implicit Namespace Packages](https://peps.python.org/pep-0420/)
 
