@@ -4,11 +4,11 @@ RELEASE_REPO := https://github.com/aleksey925/knowledge-base.git
 
 debug-build:
 	rm -rf ./output \
-	&& docker-compose up debug-build
+	&& docker compose up debug-build
 
 build:
 	rm -rf ./output \
-	&& docker-compose up build
+	&& docker compose up build
 
 publish:
 	rm -rf ./output \

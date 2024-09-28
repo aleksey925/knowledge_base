@@ -1,90 +1,101 @@
 Tutorial alembic
 ================
 
-alembic - это легковесный инструмент для создания и управления миграциями БД
+alembic - это легковесный инструмент для создания и управления миграциями БД.
 
+> Пример очень простого проекта, который настроен в соответствии с данным мануалом 
+> и показывает как работать с alembic можно найти [здесь](https://github.com/aleksey925/alembic-example).
+
+## Содержание
+
+- [Добавление в проект миграций БД](#добавление-в-проект-миграций-бд)
+    - [Установка](#установка)
+    - [Инициализация alembic в проекте](#инициализация-alembic-в-проекте)
+    - [Автоматическая генерация миграций](#автоматическая-генерация-миграций)
+    - [Ручное создание миграций](#ручное-создание-миграций)
+    - [Добавление миграций в существующие приложение](#добавление-миграций-в-существующие-приложение)
+    - [Использование alembic в тестах](#использование-alembic-в-тестах)
+- [Исправление известных проблем](#исправление-известных-проблем)
+    - [Команда для автоматической генерации миграции создает пустой скрипт](#команда-для-автоматической-генерации-миграции-создает-пустой-скрипт)
+    - [No support for ALTER of constraints in SQLite dialec](#no-support-for-alter-of-constraints-in-sqlite-dialec)
+    - [Изменение foreign key в sqlite](#изменение-foreign-key-в-sqlite)
+
+
+<a name='добавление-в-проект-миграций-бд'></a>
 ## Добавление в проект миграций БД
 
-Данный туториал описывает процесс добавления в уже существующий проект миграций для БД.
+Данный туториал описывает процесс настройки alembic в проекте, для управления 
+миграциями, а так же показывает как можно вызывать alembic из тестов для 
+инициализации БД.
 
+<a name='установка'></a>
 ### Установка
 
-Первым делом необходимо установить библиотеку alembic
+Устанавливаем alembic 
 
 ```bash
-pip3 install alembic==1.8.1
+pip install alembic>=1.13.3
 ```
 
-### Настройка проекта
+<a name='инициализация-alembic-в-проекте'></a>
+### Инициализация alembic в проекте
 
-Инициализируем alembic в проекте:
+Инициализируем alembic:
 
 ```bash
 alembic init --template generic migrations
 ```
 
 В создавшемся файле `alembic.ini` проверьте наличие следующих настроек в секции `[alembic]` и если их нет 
-или они закоментированы добавьте/раскоментируйте их.
+или они закомментированы добавьте/раскомментируйте их.
 
 - `file_template = %%(year)d_%%(month).2d_%%(day).2d_%%(hour).2d%%(minute).2d-%%(rev)s_%%(slug)s` -   
   шаблон имени файла с миграцией, который создает alembic. Довольно важный параметр, который помогает легче
   ориентироваться в созданных миграциях.
 
-- `prepend_sys_path = .` - очень важная настройка, если вы скрипте `env.py` выполняете импорт метаданных 
-   sqlalchemy или каких-то других частей вашего проекта. Если её не добавить, то во время импорта каких 
-   либо объектов из вашего проекта будет происходить ошибка импорта. Данная настройка решает эту проблему
-   и пользовает не модицировать sys.path вручную во время выполнения `env.py`.
+- `prepend_sys_path = .` - очень важная настройка. Она нужна, чтобы вы могли импортировать метаданные 
+  или какие-то любые другие части вашего проекта в скрипте`env.py` без проблем. Иначе вам придется 
+  редактировать `sys.path` вручную внутри `env.py`.
 
-Теперь, после базовой настройки, необходимо немного подправить сгенерированный 
-скрипт env.py. Это нужно, чтобы научить alembic брать URI для подключения к БД 
-не из `alembic.ini`, а из глобального для всего проекта конфига (который обычно 
-является python модулем), а так же включить поддержку автогенерации миграций 
-и т д. Для этого открываем скрипт `migrations/env.py` и:
+Теперь, после базовой настройки, необходимо немного подправить сгенерированный скрипт `env.py`. Это нужно, 
+чтобы объяснить alembic к какой базе данных он должен подключаться, где он может найти метаданные 
+sqlalchemy, а так же включить поддержку автогенерации миграций.
 
-- импортируем из конфига URI БД и базовый класс `Base` из которого мы сможем 
-получить объект MetaData
+Для этого открываем скрипт `migrations/env.py` и:
+
+- импортируем базовый класс всех моделей sqlalchemy, берем из него metadata и кладем в переменную 
+`target_metadata`
 
     ```python
-    from config import SQLALCHEMY_DATABASE_URI
-    from models import Base
+    from main import Base
+    ...
+    target_metadata = Base.metadata
+    ...
     ```
+
+- где-то после объявления `target_metadata` вставляем следующий код, которые будет говорить alembic 
+с какой БД он должен работать
+
+    ```python
+    pg_dns = build_pg_dsn(
+        user=os.environ['PG_USER'],
+        password=os.environ['PG_PASSWORD'],
+        host=os.environ['PG_HOST'],
+        dbname=os.environ['PG_DB'],
+    )
+    config.set_main_option('sqlalchemy.url', pg_dns)
+    ```
+
+    В данном случае, мы собираем строку подключения к БД из переменных окружения. Вы можете брать
+    ее откуда угодно, на пример из конфигурационного файла проекта.
 
 - находим строку `fileConfig(config.config_file_name)` и заменяем ее на
-  `fileConfig(config.config_file_name, disable_existing_loggers=False)`. Если
-   это не сделать alembic отключит все существующие логгеры. В случае если 
-   alembic вызывается исключительно как консольная команда, то это не страшно,
-   но если работа с миграциями будет осуществляться из кода приложения, 
-   то дефотное поведение alembic может доставить много хлопот.
+`fileConfig(config.config_file_name, disable_existing_loggers=False)`. Если  это не сделать alembic 
+отключит все существующие логгеры. В случае если alembic вызывается исключительно как консольная 
+команда, то это не страшно, но если работа с миграциями будет осуществляться из кода приложения, 
+то дефотное поведение alembic может доставить много хлопот. 
 
-- находим строку `target_metadata = None` и заменяем на:
-
-    ```python
-    target_metadata = Base.metadata
-    ```
-
-- где-то после объявления `target_metadata` вставляем следующую строку
-
-    ```python
-    config.set_main_option('sqlalchemy.url', SQLALCHEMY_DATABASE_URI)
-    ```
-  
-    Это нужно, чтобы alembic знал, параметры подключения к БД с которой нужно 
-    будет работать.
-  
-- находим в функции `run_migrations_online` вызов `context.configure` и 
-    приводим его следующему виду:
-
-    ```python
-    context.configure(
-        connection=connection,
-        target_metadata=target_metadata,
-        render_as_batch=connectable.url.drivername == 'sqlite',
-    )
-    ```
-
-Пример настроенного проекта вы сможете найти [тут](https://gitlab.com/alex925/alembic-example).
-
-
+<a name='автоматическая-генерация-миграций'></a>
 ### Автоматическая генерация миграций
 
 После настройки можно сгенерировать нашу первую миграцию, которая зафиксирует
@@ -101,7 +112,7 @@ alembic revision --autogenerate -m "init"
 alembic upgrade head
 ```
 
-### Ограничения автоматической генерации миграций
+#### Ограничения автоматической генерации миграций
 
 Автогенерация просто замечательна, но у нее есть некоторые ограничения, о 
 которых нужно знать. Прежде всего, если вы переименуете таблицу или столбец,
@@ -110,6 +121,7 @@ alembic upgrade head
 автоматически сгенерированной миграции в которой был переименован 
 столбец/таблица. 
 
+<a name='ручное-создание-миграций'></a>
 ### Ручное создание миграций
 
 Иногда бывает нужно создать миграцию вручную. Для этого необходимо выполнить
@@ -172,6 +184,7 @@ alembic downgrade 2e8e603859e2
 alembic downgrade -1
 ```
 
+<a name='добавление-миграций-в-существующие-приложение'></a>
 ### Добавление миграций в существующие приложение
 
 При добавлении миграций в существующие приложение, где в БД уже созданы все 
@@ -182,8 +195,7 @@ alembic downgrade -1
 alembic stamp head
 ```
 
-чтобы alembic проинциализировался и записал в специальной сервисной таблице
-необходимую мета информацию.
+После этого alembic будет считать, что все миграции применены и не будет пытаться запустить.
 
 Ссылки на дополнительные материалы:
 
@@ -191,66 +203,78 @@ alembic stamp head
 - [Schema migrations with Alembic, Python and PostgreSQL](https://www.compose.com/articles/schema-migrations-with-alembic-python-and-postgresql/)
 
 
-### Применение миграций из кода приложения
+<a name='использование-alembic-в-тестах'></a>
+### Использование alembic в тестах
 
-Применить миграции из кода приложения можно при помощи следующего кода
+Ниже приведен пример фикстур, которые нужно положить в `conftest.py` и после этого вы 
+можете писать тесты, которые будут взаимодействовать с БД через подключение выдаваемое в
+фикстурой pg_conn.
 
 ```python
-import logging
+import asyncio
 import os
+from pathlib import Path
+from typing import AsyncGenerator, Generator
 
-from alembic.config import main as alembic_commands
+import pytest
+from alembic import command
+from alembic.config import Config
+from sqlalchemy.ext.asyncio import AsyncEngine, AsyncConnection, create_async_engine
+from sqlalchemy_utils import drop_database, create_database, database_exists
+
+from main import build_pg_dsn
+
+os.environ['PG_DB'] = f"{os.environ['PG_DB']}_test"
+PG_DSN = build_pg_dsn(
+    user=os.environ['PG_USER'],
+    password=os.environ['PG_PASSWORD'],
+    host=os.environ['PG_HOST'],
+    dbname=os.environ['PG_DB'],
+)
+ROOT_DIR = Path(__file__).parent.parent
 
 
-def root_logger_cleaner():
-    """
-    Сбрасывает root логгер к настройкам, которые были у root логгера при
-    инициализации коррутины
-    """
-    root = logging.getLogger()
-    default_settings = {
-        'level': root.level,
-        'disabled': root.disabled,
-        'propagate': root.propagate,
-        'filters': root.filters[:],
-        'handlers': root.handlers[:],
-    }
+@pytest.fixture(scope='session')
+def project_root() -> Path:
+    return ROOT_DIR
+
+
+@pytest.fixture(scope='session')
+def setup_pg(project_root: Path) -> Generator[None, None, None]:
+    if database_exists(PG_DSN):
+        drop_database(PG_DSN)
+    create_database(PG_DSN)
+
+    curr_work_dir = os.getcwd()
+    os.chdir(project_root)
+    alembic_cfg = Config(str(ROOT_DIR / 'alembic.ini'))
+    command.upgrade(alembic_cfg, 'head')
+    os.chdir(curr_work_dir)
+
     yield
 
-    while True:
-        for attr, attr_value in default_settings.items():
-            setattr(root, attr, attr_value)
-        yield
+    drop_database(PG_DSN)
 
 
-def apply_migrations(root_dir):
-    """
-    Применяет к текущей БД все миграции
-    :param root_dir: корневая дирректория проекта (дирректория в которой
-    располагается папка alembic, содержащая миграции)
-    """
-    cwd = os.getcwd()
-    os.chdir(root_dir)
-    logger_cleaner = root_logger_cleaner()
-    next(logger_cleaner)
+@pytest.fixture(scope='session')
+def pg_engine() -> Generator[AsyncEngine, None, None]:
+    engine = create_async_engine(PG_DSN)
+    yield engine
+    asyncio.run(engine.dispose())
 
-    try:
-        alembic_commands(argv=('--raiseerr', 'upgrade', 'head',))
-    except Exception as err:
-        next(logger_cleaner)
-        logging.getLogger().error(
-            f'Возникла ошибка при попытке применить миграции: {err}'
-        )
-        raise
-    finally:
-        os.chdir(cwd)
 
-    next(logger_cleaner)
+@pytest.fixture
+async def pg_conn(setup_pg: None, pg_engine: AsyncEngine) -> AsyncGenerator[AsyncConnection, None]:
+    async with pg_engine.begin() as conn:
+        yield conn
+        await conn.rollback()
 ```
 
 
+<a name='исправление-известных-проблем'></a>
 ## Исправление известных проблем
 
+<a name='команда-для-автоматической-генерации-миграции-создает-пустой-скрипт'></a>
 ### Команда для автоматической генерации миграции создает пустой скрипт
 
 Если вы столкнулись с тем, что автоматическая генерация миграций не срабатывает,
@@ -269,6 +293,7 @@ def apply_migrations(root_dir):
 - реализовать в `__init__.py` импортирование всех модулей пакета
 - в env.py импортировать класс Base из этого пакета
 
+<a name='no-support-for-alter-of-constraints-in-sqlite-dialec'></a>
 ### No support for ALTER of constraints in SQLite dialec
 
 При использовании sqlite может возникать ошибка 
@@ -290,6 +315,7 @@ env.
 - [batch_alter_table - alembic](https://kite.com/python/docs/alembic.op.batch_alter_table)
 
 
+<a name='изменение-foreign-key-в-sqlite'></a>
 ### Изменение foreign key в sqlite
 
 Пример миграции, которая изменяет значение ondelete у внешнего ключа
