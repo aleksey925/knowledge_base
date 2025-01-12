@@ -20,6 +20,7 @@
     - [Удаление мусора](#Удаление-мусора)
     - [Отключение авторизации для доступа к сертификату из keychain](#Отключение-авторизации-для-доступа-к-сертификату-из-keychain)
     - [Авторизация в консоли через TouchID](#Авторизация-в-консоли-через-TouchID)
+    - [Terminal. Удаление слов через option + delete](#Terminal-удаление-слов-через-option-+-delete)
     
 2. <h3>[Установка/удаление программ](#Установка/удаление-программ)</h3>
 
@@ -513,6 +514,20 @@ session    required       pam_permit.so
 Полезные ссылки:
 
 - [How to use sudo with Touch ID on a Mac](https://nicholasmangold.com/blog/how-use-sudo-touch-id-mac)
+
+
+<a name='Terminal-удаление-слов-через-option-+-delete'></a>
+### Terminal. Удаление слов через option + delete
+
+В терминале можно удалять слова целиком, если нажать `option` + `delete`, но по умолчанию 
+данный hotkey не активен. Активировать его можно следующим образом:
+
+- открываем терминал
+- нажимаем `cmd` + `,`, чтобы открыть настройки терминала
+- переходим во вкладку `Profiles` -> `Keyboard`
+- внизу окна находим `Use Option as Meta key` и активируем его
+
+Нашел [здесь](https://stackoverflow.com/questions/327664/mac-os-x-terminal-map-optiondelete-to-backward-delete-word).
 
 
 <a name='Установка/удаление-программ'></a>
